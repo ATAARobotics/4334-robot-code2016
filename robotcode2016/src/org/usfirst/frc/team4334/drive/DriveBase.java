@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import org.usfirst.frc.team4334.utils.*;
 
 public class DriveBase {
 	//normal tank drivebase 
@@ -34,6 +35,17 @@ public class DriveBase {
 		encRight = rightE;
 	}
 	
+	public DriveBase(LinkedList<SpeedController> left,
+			LinkedList<SpeedController> right) {
+		rightMotors = left;
+		leftMotors = right;
+		//default tele op drive mode 
+		currMode = DriveMode.HALO;
+		
+		encLeft = null;
+		encRight = null;
+	}
+
 	public void setLeftPow(double pow){
 		for(SpeedController l : leftMotors){
 			l.set(pow);
@@ -52,20 +64,21 @@ public class DriveBase {
 	}
 
 	
-	public void teleopDrive(Joystick a, Joystick b){
-		teleopDrive(a, b, JOY_DEADZONE);
+	public void teleopDrive(Joystick a ){
+		teleopDrive(a, JOY_DEADZONE);
 	}
 	
 	
-	public void teleopDrive(Joystick a, Joystick b, double deadzone){
-		teleopDrive(a, b, JOY_DEADZONE, this.currMode);
+	public void teleopDrive(Joystick a, double deadzone){
+		teleopDrive(a, JOY_DEADZONE, this.currMode);
 	}
 	
-	public void teleopDrive(Joystick a, Joystick b, double deadzone, DriveMode desiredMode){
-		double x1 = Utils.deadzone(a.getX(), JOY_DEADZONE);
-		double x2 = Utils.deadzone(b.getX(), JOY_DEADZONE);
-		double y1 = Utils.deadzone(a.getY(), JOY_DEADZONE);
-		double y2 = Utils.deadzone(b.getY(), JOY_DEADZONE);
+	public void teleopDrive(Joystick a, double deadzone, DriveMode desiredMode){
+	
+		double x1 = Utils.deadzone(a.getRawAxis(1), JOY_DEADZONE);
+		double x2 = Utils.deadzone(a.getRawAxis(2), JOY_DEADZONE);
+		double y1 = Utils.deadzone(a.getRawAxis(3), JOY_DEADZONE);
+		double y2 = Utils.deadzone(a.getRawAxis(4), JOY_DEADZONE);
 		
 		
 		

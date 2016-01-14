@@ -1,8 +1,7 @@
+package org.usfirst.frc.team4334.subsystems;
+
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.SpeedController;
-
-
-
 
 
 public class FlywheelController implements Runnable {

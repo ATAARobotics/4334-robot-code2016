@@ -1,56 +1,53 @@
-
 package org.usfirst.frc.team4334.robot;
 
+import acilibj.actuators.SuperJoystickModule;
+import acilibj.actuators.TankDrivetrain;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.wpilibj.SampleRobot;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
-
-/**
- * This is a demo program showing the use of the RobotDrive class.
- * The SampleRobot class is the base of a robot application that will automatically call your
- * Autonomous and OperatorControl methods at the right time as controlled by the switches on
- * the driver station or the field controls.
- *
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the SampleRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- *
- * WARNING: While it may look like a good choice to use for your code if you're inexperienced,
- * don't. Unless you know what you are doing, complex code will be much more difficult under
- * this system. Use IterativeRobot or Command-Based instead if you're new.
- */
-public class Robot extends SampleRobot {
-    RobotDrive myRobot;
-    Joystick stick;
-
-    public Robot() {
-
+public class Robot extends IterativeRobot 
+{
+	Victor L1 = new Victor(RobotMap.left1Port);
+	Victor L2 = new Victor(RobotMap.left2Port);
+	Victor R1 = new Victor(RobotMap.right1Port);
+	Victor R2 = new Victor(RobotMap.right2Port);
+	
+	Victor shooter = new Victor(RobotMap.shooterMotorPort);
+	Victor intake = new Victor(RobotMap.intakePort);
+	
+    TankDrivetrain drivetrain;
+    SuperJoystickModule driver = new SuperJoystickModule(RobotMap.joystick1Port), operator = new SuperJoystickModule(RobotMap.joystick2Port);
+    
+    public void robotInit() 
+    {
+    	drivetrain = new TankDrivetrain(L1, L2, R1, R2);
     }
 
-    /**
-     * Drive left & right motors for 2 seconds then stop
-     */
-    public void autonomous() {
-
+    public void autonomousPeriodic()
+    {
+    	
     }
 
-    /**
-     * Runs the motors with arcade steering.
-     */
-    public void operatorControl() {
-        myRobot.setSafetyEnabled(true);
-        while (isOperatorControl() && isEnabled()) {
-
-        }
+    public void teleopPeriodic() 
+    {
+        drivetrain.getArcade(driver.getAxisWithDeadzone(4, 0.12, false), driver.getAxisWithDeadzone(1, 0.12, true), 1, 0.7);
+        
+        SmartDashboard.putBoolean("dPad", driver.getDpad(3));
+        
+        intake.set(operator.getAxisWithDeadzone(3, 0.12, false));
+  
+        shooter.set(Math.abs(operator.getAxisWithDeadzone(1, 0.12, true)));
     }
-
-    /**
-     * Runs during test mode
-     */
-    public void test() {
+   
+    public void testPeriodic() 
+    {
+    
     }
+    
+    public void disabledPeriodic()
+    {
+    	
+    }
+    
 }
