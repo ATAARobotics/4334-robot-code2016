@@ -12,6 +12,4 @@ public class Ports {
 	public static final int SHOOTER = 4;
 	public static final int INTAKE = 5;
 
-	
-	
 }

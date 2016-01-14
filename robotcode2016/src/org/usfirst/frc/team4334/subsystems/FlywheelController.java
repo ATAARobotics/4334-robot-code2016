@@ -1,7 +1,10 @@
 package org.usfirst.frc.team4334.subsystems;
 
+import org.usfirst.frc.team4334.utils.PidController;
+
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class FlywheelController implements Runnable {
@@ -44,7 +47,7 @@ public class FlywheelController implements Runnable {
 	}
 	
 	
-	private void setflyPow(double pow){
+	private void setFlyPow(double pow){
 		//we don't want to run the flywheel backwards things will explode
 		if(pow < 0){
 			pow = 0; 
@@ -57,18 +60,24 @@ public class FlywheelController implements Runnable {
 		this.predPow = pred;
 	}
 
+	
+	private boolean pid_enabled = true;
 	@Override
 	public void run() {
-		this.error = this.setPoint - this.getSpeed();
-		double output = this.predPow + pid.calculate(this.error);
-		try {
-			Thread.sleep(THREAD_TIME);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		SmartDashboard.putNumber("fly kP", this.kP);
+		SmartDashboard.putNumber("fly kD", this.kD);
+		SmartDashboard.putNumber("fly kI", this.kI);
+		SmartDashboard.putNumber("fly int_lim", this.intLim);
+		SmartDashboard.putNumber("error ", this.error);
+		while(pid_enabled){
+			this.error = this.setPoint - this.getSpeed();
+			double output = this.predPow + pid.calculate(this.error);
+			this.setFlyPow(output);
+			try {
+				Thread.sleep(THREAD_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	
-	
 }

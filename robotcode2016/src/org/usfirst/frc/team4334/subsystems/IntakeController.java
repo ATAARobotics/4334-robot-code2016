@@ -18,6 +18,8 @@ public class IntakeController {
 		intk.set(1);
 	}
 	
-
+	public void stop(){
+		intk.set(0);
+	}
 	
 }

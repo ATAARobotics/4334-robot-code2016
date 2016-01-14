@@ -1,53 +1,68 @@
 package org.usfirst.frc.team4334.robot;
 
-import acilibj.actuators.SuperJoystickModule;
-import acilibj.actuators.TankDrivetrain;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import java.util.LinkedList;
+
+import org.usfirst.frc.team4334.drive.DriveBase;
+import org.usfirst.frc.team4334.subsystems.IntakeController;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Robot extends IterativeRobot 
-{
-	Victor L1 = new Victor(RobotMap.left1Port);
-	Victor L2 = new Victor(RobotMap.left2Port);
-	Victor R1 = new Victor(RobotMap.right1Port);
-	Victor R2 = new Victor(RobotMap.right2Port);
-	
-	Victor shooter = new Victor(RobotMap.shooterMotorPort);
-	Victor intake = new Victor(RobotMap.intakePort);
-	
-    TankDrivetrain drivetrain;
-    SuperJoystickModule driver = new SuperJoystickModule(RobotMap.joystick1Port), operator = new SuperJoystickModule(RobotMap.joystick2Port);
-    
-    public void robotInit() 
-    {
-    	drivetrain = new TankDrivetrain(L1, L2, R1, R2);
-    }
-
-    public void autonomousPeriodic()
-    {
+public class Robot extends SampleRobot {
+    RobotDrive myRobot;
+    Joystick stick;
+    DriveBase drive;
+	IntakeController intake;
+	//temporary until we have sensors 
+	Victor sketchyFlywheel = new Victor(Ports.SHOOTER);
+    public Robot(){
+    	LinkedList<SpeedController> left = new LinkedList<SpeedController>();
+    	LinkedList<SpeedController> right = new LinkedList<SpeedController>();
+    	left.add(new Victor(Ports.DRIVE_LEFT_1));
+    	left.add(new Victor(Ports.DRIVE_LEFT_2));
+    	right.add(new Victor(Ports.DRIVE_RIGHT_1));
+    	right.add(new Victor(Ports.DRIVE_RIGHT_2));
+    	drive = new DriveBase(left,right);
+    	intake = new IntakeController(Ports.INTAKE);
     	
     }
 
-    public void teleopPeriodic() 
-    {
-        drivetrain.getArcade(driver.getAxisWithDeadzone(4, 0.12, false), driver.getAxisWithDeadzone(1, 0.12, true), 1, 0.7);
-        
-        SmartDashboard.putBoolean("dPad", driver.getDpad(3));
-        
-        intake.set(operator.getAxisWithDeadzone(3, 0.12, false));
-  
-        shooter.set(Math.abs(operator.getAxisWithDeadzone(1, 0.12, true)));
+    public void autonomous() {
+
     }
-   
-    public void testPeriodic() 
-    {
-    
+
+    public void operatorControl() {
+        myRobot.setSafetyEnabled(true);
+        Joystick joyDrive = new Joystick(Ports.JOYSTICK_1);
+        Joystick joyOper = new Joystick(Ports.JOYSTICK_1);
+        
+        while (isOperatorControl() && isEnabled()) {
+        	drive.teleopDrive(joyDrive);
+        	if(joyDrive.getRawButton(1)){
+        		intake.driveIn();
+        	}
+        	else if(joyDrive.getRawButton(2)){
+        		intake.driveOut();
+        	}
+        	else{
+        		intake.stop();
+        	}
+        	if(joyDrive.getRawButton(3)){
+        		sketchyFlywheel.set(1);
+        	} 
+        	else if(joyDrive.getRawButton(4)){
+        		sketchyFlywheel.set(0.5);
+        	} else{
+        		sketchyFlywheel.set(0);
+        	}
+        }
+        
     }
-    
-    public void disabledPeriodic()
-    {
+
+    public void test() {
     	
     }
-    
 }

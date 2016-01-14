@@ -18,7 +18,6 @@ public class DriveBase {
 	
 	public static final double JOY_DEADZONE = 0.05;
 	
-	
 	public DriveMode currMode; 
 	public static enum DriveMode {
 		HALO, ARCADE
@@ -76,11 +75,9 @@ public class DriveBase {
 	public void teleopDrive(Joystick a, double deadzone, DriveMode desiredMode){
 	
 		double x1 = Utils.deadzone(a.getRawAxis(1), JOY_DEADZONE);
-		double x2 = Utils.deadzone(a.getRawAxis(2), JOY_DEADZONE);
-		double y1 = Utils.deadzone(a.getRawAxis(3), JOY_DEADZONE);
+		double y1 = Utils.deadzone(a.getRawAxis(2), JOY_DEADZONE);
+		double x2 = Utils.deadzone(a.getRawAxis(3), JOY_DEADZONE);
 		double y2 = Utils.deadzone(a.getRawAxis(4), JOY_DEADZONE);
-		
-		
 		
 		//forward on stick b, turn on stick a
 		if(this.currMode == DriveMode.HALO){
@@ -95,7 +92,7 @@ public class DriveBase {
 		}	
 	}
 	
-	private double mapToNDeg(double in, int n){
-		return Math.pow(in,n) * in / Math.abs(in);
+	private double mapToNDeg(double in, int n, double max){
+		return (Math.pow(in,n) * in / Math.abs(in)) / Math.pow(max, n-1);
 	}
 }
