@@ -16,8 +16,10 @@ public class Robot extends SampleRobot {
     Joystick stick;
     DriveBase drive;
 	IntakeController intake;
+	
 	//temporary until we have sensors 
 	Victor sketchyFlywheel = new Victor(Ports.SHOOTER);
+	
     public Robot(){
     	LinkedList<SpeedController> left = new LinkedList<SpeedController>();
     	LinkedList<SpeedController> right = new LinkedList<SpeedController>();
@@ -27,7 +29,6 @@ public class Robot extends SampleRobot {
     	right.add(new Victor(Ports.DRIVE_RIGHT_2));
     	drive = new DriveBase(left,right);
     	intake = new IntakeController(Ports.INTAKE);
-    	
     }
 
     public void autonomous() {

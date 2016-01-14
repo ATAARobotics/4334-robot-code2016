@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import org.usfirst.frc.team4334.utils.*;
 
 public class DriveBase {
+	public static final double JOY_DEADZONE = 0.05;
 	//normal tank drivebase 
 	private LinkedList<SpeedController> rightMotors;
 	private LinkedList<SpeedController> leftMotors;
@@ -15,10 +16,7 @@ public class DriveBase {
 	private Counter encLeft;
 	private Counter encRight;
 	
-	
-	public static final double JOY_DEADZONE = 0.05;
-	
-	public DriveMode currMode; 
+	public DriveMode currMode = DriveMode.HALO;; 
 	public static enum DriveMode {
 		HALO, ARCADE
 	}
@@ -27,9 +25,6 @@ public class DriveBase {
 			Counter leftE, Counter rightE){
 		rightMotors = rightM;
 		leftMotors = leftM;
-		//default tele op drive mode 
-		currMode = DriveMode.HALO;
-		
 		encLeft = leftE;
 		encRight = rightE;
 	}
@@ -38,9 +33,6 @@ public class DriveBase {
 			LinkedList<SpeedController> right) {
 		rightMotors = left;
 		leftMotors = right;
-		//default tele op drive mode 
-		currMode = DriveMode.HALO;
-		
 		encLeft = null;
 		encRight = null;
 	}
@@ -62,18 +54,15 @@ public class DriveBase {
 		setRightPow(rightPow);
 	}
 
-	
 	public void teleopDrive(Joystick a ){
 		teleopDrive(a, JOY_DEADZONE);
 	}
-	
 	
 	public void teleopDrive(Joystick a, double deadzone){
 		teleopDrive(a, JOY_DEADZONE, this.currMode);
 	}
 	
 	public void teleopDrive(Joystick a, double deadzone, DriveMode desiredMode){
-	
 		double x1 = Utils.deadzone(a.getRawAxis(1), JOY_DEADZONE);
 		double y1 = Utils.deadzone(a.getRawAxis(2), JOY_DEADZONE);
 		double x2 = Utils.deadzone(a.getRawAxis(3), JOY_DEADZONE);
@@ -93,6 +82,6 @@ public class DriveBase {
 	}
 	
 	private double mapToNDeg(double in, int n, double max){
-		return (Math.pow(in,n) * in / Math.abs(in)) / Math.pow(max, n-1);
+		return (Math.pow(in,n) * in / Math.abs(in)) / Math.pow(Math.abs(max), n-1);
 	}
 }
