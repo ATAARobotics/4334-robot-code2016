@@ -13,4 +13,10 @@ public class Utils {
 		}
 		return input;
 	}
+	
+	public static double signedMod(double a, double b){
+		return a - Math.floor(a/b) * b;
+	}
+	
+	
 }

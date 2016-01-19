@@ -11,6 +11,7 @@ import org.usfirst.frc.team4334.utils.*;
 
 public class DriveBase {
 	public static final double JOY_DEADZONE = 0.15;
+	
 	//normal tank drivebase 
 	private LinkedList<SpeedController> rightMotors;
 	private LinkedList<SpeedController> leftMotors;
@@ -104,4 +105,6 @@ public class DriveBase {
 		}
 		return 0;
 	}
+	
+	
 }
