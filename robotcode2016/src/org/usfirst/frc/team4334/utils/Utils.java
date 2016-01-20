@@ -18,5 +18,17 @@ public class Utils {
 		return a - Math.floor(a/b) * b;
 	}
 	
+
+	public static double getAngleDifferenceDeg(double target, double source){
+		double a = target - source;
+		return Utils.signedMod(a + 180, 360) - 180;
+	}
+	
+	public static double getAngleDifferenceRad(double target, double source){
+		double a = target - source;
+		return Utils.signedMod(a + Math.PI, 2 * Math.PI) - Math.PI;
+	}
+	
+	
 	
 }

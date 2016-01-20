@@ -77,15 +77,11 @@ public class DriveBase {
 		this.currMode = DriveMode.HALO;
 		//forward on stick b, turn on stick a
 		if(this.currMode == DriveMode.HALO){
-
-				y1 = mapToNDeg(y1,3);
-			
-	
-				x2 = mapToNDeg(x2,3);
-			
+				y1 = mapToNDeg(y1,5);
+				x2 = mapToNDeg(x2,5);
 			//left out = y2 + x1
 			//right out = y2 - x1
-			this.setDrive((double)y1 - (double)x2, (double)y1 + (double)x2);
+			this.setDrive((double)y2 + (double)x1, (double)y2 - (double)x1);
 		}
 		
 		if(this.currMode == DriveMode.ARCADE){

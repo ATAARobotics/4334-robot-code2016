@@ -16,7 +16,7 @@ public class PidController {
 	private double slewRate;
 	private double integralLimit;
 	
-	private double errorSum;
+	public double errorSum;
 	private double lastError;
 	private long lastTime;
 	
@@ -28,7 +28,7 @@ public class PidController {
 		kD = d;
 		integralLimit = intLim;
 		
-		
+		epsilon = 0;
 		errorSum = 0;
 		lastError = 0;
 		//on by default
@@ -45,9 +45,11 @@ public class PidController {
 	}
 	
 	public double calculate(double error){
-		long dTime = System.currentTimeMillis() - lastTime;
-		lastTime = System.currentTimeMillis();
+		long dTime = (System.currentTimeMillis() - lastTime)/10;
+		System.out.println("dtime = " + dTime + "  " + errorSum);
 		
+		lastTime = System.currentTimeMillis();
+		double changeInError = 0;
 		if(Math.abs(error) > epsilon){
 			errorSum += error * dTime;
 		} else{
@@ -55,15 +57,21 @@ public class PidController {
 		}
 		
 		//limits error sum to +integralLimit or -integralLimit
-		Utils.clamp(errorSum, integralLimit);
+		errorSum = Utils.clamp(errorSum, integralLimit);
 		
 		if(zeroOnCross){
 			if(Math.signum(error) != Math.signum(lastError)){
 				errorSum = 0;
 			}
 		}
+
+		if(dTime != 0){
+			changeInError = (error - lastError) / dTime;
+		}
+		else{
+			changeInError = 0;
+		}
 		
-		double changeInError = (error - lastError) / dTime;
 		lastError = error;
 		
 		return kP * error + kI * errorSum + kD * changeInError;
