@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FlywheelController implements Runnable {
 	
-	final int TICKS_PER_WHEEL_ROTATION = 360;
+	final int TICKS_PER_WHEEL_ROTATION = 2;
 	final int THREAD_TIME = 20;
-	final double kP = 0.1;
-	final double kI = 0;
+	final double kP = 0.001;
+	final double kI = 0.001;
 	final double kD = 0;
-	final double intLim = 5000;
+	final double intLim = 1000;
 	PidController pid;
 	
-	private Counter enc;
+	private Counter hallEffect;
 	private SpeedController s1;
 	private double setPoint;
 	private double predPow;
@@ -26,8 +26,8 @@ public class FlywheelController implements Runnable {
 	//(probably will not be the case)
 	
 	
-	public FlywheelController(Counter encoder, SpeedController speedcntrl){
-		enc = encoder;
+	public FlywheelController(Counter hallE, SpeedController speedcntrl){
+		hallEffect = hallE;
 		s1 = speedcntrl;
 		pid = new PidController(kP, kI, kD, intLim, false);
 	}
@@ -38,7 +38,7 @@ public class FlywheelController implements Runnable {
 		//I've never used this
 		//if we're using
 		//get rate of encoder ticks (ticks/sec)
-		double rate = this.enc.getRate();
+		double rate = this.hallEffect.getRate();
 		//convert to rotations / s 
 		double speed = rate / TICKS_PER_WHEEL_ROTATION;
 		//convert to rpm 
@@ -55,23 +55,35 @@ public class FlywheelController implements Runnable {
 		s1.set(pow);
 	}
 	
-	private void setFlySpeed(double rpm, double pred){
+	public void setFlySpeed(double rpm){
+		this.setPoint = rpm;
+		this.predPow = 0;
+		pid.reset();
+	}
+	
+	
+	public void setFlySpeed(double rpm, double pred){
 		this.setPoint = rpm;
 		this.predPow = pred;
+		pid.reset();
 	}
 
 	
 	private boolean pid_enabled = true;
 	@Override
 	public void run() {
-		SmartDashboard.putNumber("fly kP", this.kP);
-		SmartDashboard.putNumber("fly kD", this.kD);
-		SmartDashboard.putNumber("fly kI", this.kI);
-		SmartDashboard.putNumber("fly int_lim", this.intLim);
-		SmartDashboard.putNumber("error ", this.error);
+		SmartDashboard.putNumber("fly_kP", this.kP);
+		SmartDashboard.putNumber("fly_kD", this.kD);
+		SmartDashboard.putNumber("fly_kI", this.kI);
+		SmartDashboard.putNumber("fly_int_lim", this.intLim);
+		SmartDashboard.putNumber("fly_speed ", this.getSpeed());
+		SmartDashboard.putNumber("fly_error ", this.error);
 		while(pid_enabled){
 			this.error = this.setPoint - this.getSpeed();
 			double output = this.predPow + pid.calculate(this.error);
+			if(output > 0){
+				output = 0;
+			}
 			this.setFlyPow(output);
 			try {
 				Thread.sleep(THREAD_TIME);

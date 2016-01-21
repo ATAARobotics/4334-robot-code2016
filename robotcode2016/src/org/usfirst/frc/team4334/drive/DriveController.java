@@ -14,21 +14,9 @@ public class DriveController {
 	Encoder rightEnc;
 	AnalogGyro gyro;
 	
-	PidController master = new PidController(0.05,0.0015,0.001,200,true);
-	PidController slave = new PidController(0.05, 0, 0, 1000, true);
-	PidController turnPid = new PidController(0.05,0,0,200,true);
-	
-	public void editPidValues(){
-		double kP = SmartDashboard.getNumber("master_kP", 0.05);
-		double kI = SmartDashboard.getNumber("master_kI", 0.0015);
-		double kD = SmartDashboard.getNumber("master_kD", 0.001);
-
-		master = new PidController(kP, kI, kD,200,true);
-		
-	}
-	
-	
-	
+	PidController master = new PidController(0.04 ,0.0003,0.02,1200,true);
+	PidController slave = new PidController(0.05,0,0.001, 200, true);
+	PidController turnPid = new PidController(0.05,0.0006,0.02,600,true);
 	
 	public static final double TICKS_PER_FEET = 75;
 	public static final int THREAD_SLEEP_MS = 20;
@@ -53,7 +41,7 @@ public class DriveController {
 		int initLeft = leftEnc.get();
 		int initRight = rightEnc.get();
 		while(!atSetpoint){
-			editPidValues();
+			//master.sendValuesToDashboard("drive");
 			double driveErr = setPoint - (leftEnc.get() - initLeft);
 			double slaveErr = (leftEnc.get() - initLeft) - (rightEnc.get() - initRight);			
 			double driveOut = master.calculate(driveErr);
@@ -66,6 +54,7 @@ public class DriveController {
 			SmartDashboard.putNumber("driveOut" , driveOut);
 			SmartDashboard.putNumber("error sum", master.errorSum );
 			System.out.println(driveErr);
+			System.out.println(driveOut);
 			
 			if(Math.abs(driveOut) > 0.6){
 				driveOut = 0.6 * driveOut / Math.abs(driveOut);
@@ -99,26 +88,32 @@ public class DriveController {
 	}
 	
 	
+	public void turnDegreesRel(double degrees){
+		turnDegreesAbsolute(gyro.getAngle() + degrees);
+	}
+	
 	public void turnDegreesAbsolute(double degrees){
-		double setPoint = degrees % 360;
+		double setPoint = degrees;
 		boolean atSetpoint = false;
 		long initTime = System.currentTimeMillis();
 		double errorThresh = 2;
-		
+
 		int satTime = 2000;
 		
-		gyro.reset();
+		turnPid.reset();
 		slave.reset();
 		
 		int initLeft = leftEnc.get();
 		int initRight = rightEnc.get();
 		while(!atSetpoint){
-
-			double driveErr = Utils.getAngleDifferenceDeg(setPoint,(gyro.getAngle() % 360));
+				
+			double driveErr = Utils.getAngleDifferenceDeg(setPoint,gyro.getAngle());
+			System.out.println("turn err " + driveErr + "   set " + setPoint + " actual " + gyro.getAngle());
 			double slaveErr = (leftEnc.get() - initLeft) + (rightEnc.get() - initRight);			
 			double driveOut = turnPid.calculate(driveErr);
 			double slaveOut = slave.calculate(slaveErr);
 			
+			SmartDashboard.putNumber("gyro heading", gyro.getAngle());
 			SmartDashboard.putNumber("LEFT", leftEnc.get());
 			SmartDashboard.putNumber("RIGHT", rightEnc.get());
 			SmartDashboard.putNumber("Err ", driveErr);
@@ -135,8 +130,8 @@ public class DriveController {
 				slaveOut = 0.6 * slaveOut / Math.abs(slaveOut);
 			}
 			
-			slaveOut = 0;
-			drive.setDrive(driveOut, -(driveOut) );
+		
+			drive.setDrive(driveOut - slaveOut, -(driveOut + slaveOut )  );
 			
 			if(!(Math.abs(driveErr) < errorThresh)){
 				initTime = System.currentTimeMillis();

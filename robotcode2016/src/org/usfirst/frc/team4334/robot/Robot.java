@@ -4,10 +4,12 @@ import java.util.LinkedList;
 
 import org.usfirst.frc.team4334.drive.DriveBase;
 import org.usfirst.frc.team4334.drive.DriveController;
+import org.usfirst.frc.team4334.subsystems.FlywheelController;
 import org.usfirst.frc.team4334.subsystems.IntakeController;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -22,12 +24,15 @@ public class Robot extends SampleRobot {
     Joystick stick;
     DriveBase drive;
 	IntakeController intake;
+	FlywheelController flyControl;
+
 	
 	//temporary until we have sensors 
 	Victor sketchyFlywheel = new Victor(Ports.SHOOTER);
 	
 	CameraServer usbCamServ;
 
+	
 	
 	private AnalogGyro gyro;
     protected void robotInit(){
@@ -52,16 +57,18 @@ public class Robot extends SampleRobot {
     			new Encoder(Ports.ENCODER_LEFT, Ports.ENCODER_LEFT + 1,true,EncodingType.k4X)
     			, new Encoder(Ports.ENCODER_RIGHT, Ports.ENCODER_RIGHT + 1,true,EncodingType.k4X),
     			gyro);
+    	//Counter flyCount = new Counter(Ports.HALL_EFFECT);
+    	//flyControl = new FlywheelController(flyCount,new Victor(Ports.SHOOTER));
     }
     
  	DriveController driveControl;
     public void autonomous() {
-    	driveControl.driveFeet(5);
-    	driveControl.turnDegreesAbsolute(180);
-    	driveControl.driveFeet(5);
-     	driveControl.turnDegreesAbsolute(180);
-    	//driveControl.driveFeet(5);
-    	//driveControl.driveFeet(-5);
+
+    	//a.run();
+    	//driveControl.driveFeet(8);
+    	//driveControl.turnDegreesRel(45);
+    	//driveControl.turnDegreesRel(-45);
+    	//driveControl.driveFeet(-8);
     }
     
     public void operatorControl() {
@@ -70,6 +77,9 @@ public class Robot extends SampleRobot {
         Joystick joyOper = new Joystick(Ports.JOYSTICK_2);
    
         double flyPow = 0;
+        
+        //flyControl.run();
+
         while (isOperatorControl() && isEnabled()) {
         	SmartDashboard.putNumber("gyro heading" , gyro.getAngle());
         	  
@@ -86,6 +96,7 @@ public class Robot extends SampleRobot {
         		intake.stop();
         	}
         	
+
         	if(joyDrive.getRawButton(4)){
         		if(flyPow < 1){
         			flyPow += 0.1;

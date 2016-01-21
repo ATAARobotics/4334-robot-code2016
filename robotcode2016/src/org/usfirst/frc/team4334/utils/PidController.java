@@ -2,6 +2,8 @@ package org.usfirst.frc.team4334.utils;
 
 import org.usfirst.frc.team4334.utils.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 
 
@@ -46,7 +48,7 @@ public class PidController {
 	
 	public double calculate(double error){
 		long dTime = (System.currentTimeMillis() - lastTime)/10;
-		System.out.println("dtime = " + dTime + "  " + errorSum);
+		//System.out.println("dtime = " + dTime + "  " + errorSum);
 		
 		lastTime = System.currentTimeMillis();
 		double changeInError = 0;
@@ -76,5 +78,13 @@ public class PidController {
 		
 		return kP * error + kI * errorSum + kD * changeInError;
 	}
+	
+	public void sendValuesToDashboard(String mod){
+		kP = SmartDashboard.getNumber(mod + "_kP", kP);
+		kI = SmartDashboard.getNumber(mod + "_kI", kI);
+		kD = SmartDashboard.getNumber(mod + "_kD", kD);
+		integralLimit = SmartDashboard.getNumber(mod + "_intlim", integralLimit);	
+	}
+	
 	
 }
