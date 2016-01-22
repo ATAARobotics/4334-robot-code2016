@@ -78,8 +78,15 @@ public class PidController {
 		
 		return kP * error + kI * errorSum + kD * changeInError;
 	}
-	
+	boolean valuesSent = false;
 	public void sendValuesToDashboard(String mod){
+		if(!valuesSent){
+			SmartDashboard.putNumber(mod + "_kP", kP);
+			SmartDashboard.putNumber(mod + "_kI", kI);
+			SmartDashboard.putNumber(mod + "_kD", kD);
+			SmartDashboard.putNumber(mod + "_intlim", integralLimit);
+			valuesSent = true;
+		}
 		kP = SmartDashboard.getNumber(mod + "_kP", kP);
 		kI = SmartDashboard.getNumber(mod + "_kI", kI);
 		kD = SmartDashboard.getNumber(mod + "_kD", kD);
