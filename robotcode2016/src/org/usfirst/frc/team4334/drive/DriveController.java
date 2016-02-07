@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4334.drive;
 
+import org.usfirst.frc.team4334.robot.Robot;
 import org.usfirst.frc.team4334.utils.PidController;
 import org.usfirst.frc.team4334.utils.Utils;
 
@@ -10,16 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveController {
 	DriveBase drive;
-	Encoder leftEnc;
-	Encoder rightEnc;
+	public Encoder leftEnc;
+	public Encoder rightEnc;
 	AnalogGyro gyro;
 	
-	PidController master = new PidController(0.04 ,0.0003,0.02,1200,true);
-	PidController slave = new PidController(0.05,0,0.001, 200, true);
+	PidController master = new PidController(0.040 ,0.001,0.200,200,true);
+	PidController slave = new PidController(0.020,0,0.080, 200, true);
 	PidController turnPid = new PidController(0.05,0.0006,0.02,600,true);
-	
-	public static final double TICKS_PER_FEET = 75;
-	public static final int THREAD_SLEEP_MS = 20;
+
 	public DriveController(DriveBase dr, Encoder left, Encoder right, AnalogGyro g){
 		drive = dr;
 		leftEnc = left;
@@ -28,10 +27,10 @@ public class DriveController {
 	}
 	
 	public void driveFeet(double feet){
-		double setPoint = feet * TICKS_PER_FEET;
+		double setPoint = feet * DriveConstants.TICKS_PER_FEET;
 		boolean atSetpoint = false;
 		long initTime = System.currentTimeMillis();
-		double errorThresh = 2 * 0.083333 * TICKS_PER_FEET;
+		double errorThresh = 2 * 0.083333 * DriveConstants.TICKS_PER_FEET;
 		
 		int satTime = 2000;
 		
@@ -40,7 +39,9 @@ public class DriveController {
 		
 		int initLeft = leftEnc.get();
 		int initRight = rightEnc.get();
-		while(!atSetpoint){
+		while(!atSetpoint && notDisabled()){
+			master.sendValuesToDashboard("master " );
+			slave.sendValuesToDashboard("slave ");
 			//master.sendValuesToDashboard("drive");
 			double driveErr = setPoint - (leftEnc.get() - initLeft);
 			double slaveErr = (leftEnc.get() - initLeft) - (rightEnc.get() - initRight);			
@@ -53,8 +54,10 @@ public class DriveController {
 			SmartDashboard.putNumber("Slave Err", slaveErr);
 			SmartDashboard.putNumber("driveOut" , driveOut);
 			SmartDashboard.putNumber("error sum", master.errorSum );
-			System.out.println(driveErr);
-			System.out.println(driveOut);
+			
+			System.out.println("not disabled : " + notDisabled());
+			//System.out.println(driveErr);
+			//System.out.println(driveOut);
 			
 			if(Math.abs(driveOut) > 0.6){
 				driveOut = 0.6 * driveOut / Math.abs(driveOut);
@@ -77,14 +80,19 @@ public class DriveController {
 			}
 			
 			try{
-				Thread.sleep(THREAD_SLEEP_MS);
+				Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
 			}
 			catch(Exception e){
 			
 			}
 			
 		}
+		drive.setDrive(0, 0);
 		
+	}
+	
+	private boolean notDisabled(){
+		return Robot.gameState != Robot.RobotStates.DISABLED;
 	}
 	
 	
@@ -105,10 +113,10 @@ public class DriveController {
 		
 		int initLeft = leftEnc.get();
 		int initRight = rightEnc.get();
-		while(!atSetpoint){
-				
+		while(!atSetpoint && notDisabled()){
+			turnPid.sendValuesToDashboard("turn");
 			double driveErr = Utils.getAngleDifferenceDeg(setPoint,gyro.getAngle());
-			System.out.println("turn err " + driveErr + "   set " + setPoint + " actual " + gyro.getAngle());
+			//System.out.println("turn err " + driveErr + "   set " + setPoint + " actual " + gyro.getAngle());
 			double slaveErr = (leftEnc.get() - initLeft) + (rightEnc.get() - initRight);			
 			double driveOut = turnPid.calculate(driveErr);
 			double slaveOut = slave.calculate(slaveErr);
@@ -120,7 +128,7 @@ public class DriveController {
 			SmartDashboard.putNumber("Slave Err", slaveErr);
 			SmartDashboard.putNumber("driveOut" , driveOut);
 			SmartDashboard.putNumber("error sum", master.errorSum );
-			System.out.println(driveErr);
+			//System.out.println(driveErr);
 			
 			if(Math.abs(driveOut) > 0.6){
 				driveOut = 0.6 * driveOut / Math.abs(driveOut);
@@ -130,7 +138,7 @@ public class DriveController {
 				slaveOut = 0.6 * slaveOut / Math.abs(slaveOut);
 			}
 			
-		
+			slaveOut = 0;
 			drive.setDrive(driveOut - slaveOut, -(driveOut + slaveOut )  );
 			
 			if(!(Math.abs(driveErr) < errorThresh)){
@@ -143,13 +151,14 @@ public class DriveController {
 			}
 			
 			try{
-				Thread.sleep(THREAD_SLEEP_MS);
+				Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
 			}
 			catch(Exception e){
 			
 			}
 			
 		}
+		drive.setDrive(0, 0);
 	}
 	
 	

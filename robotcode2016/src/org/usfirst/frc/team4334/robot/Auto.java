@@ -1,8 +1,10 @@
 package org.usfirst.frc.team4334.robot;
 
+import java.util.TimerTask;
+
 import org.usfirst.frc.team4334.drive.DriveController;
 
-public class Auto implements Runnable {
+public class Auto extends TimerTask {
 
 	public DriveController driveController;
 	public Auto(DriveController d){
@@ -10,13 +12,14 @@ public class Auto implements Runnable {
 	}
 	
 	
-	@Override
+
 	public void run() {
-		driveController.driveFeet(5);
-		driveController.turnDegreesAbsolute(180);
-		driveController.driveFeet(5);
-		driveController.turnDegreesAbsolute(180);
+	
+	
+			driveController.turnDegreesRel(180);
+
 		
+
 	}
 	
 	
