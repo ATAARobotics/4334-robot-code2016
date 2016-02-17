@@ -20,7 +20,6 @@ public class DriveBase extends TimerTask {
 			Counter leftE, Counter rightE){
 		rightMotors = rightM;
 		leftMotors = leftM;
-
 	}
 	
 	public DriveBase(LinkedList<SpeedController> left,
