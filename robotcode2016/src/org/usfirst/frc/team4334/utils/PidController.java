@@ -4,9 +4,6 @@ import org.usfirst.frc.team4334.utils.*;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
-
-
 public class PidController {
 	//our gains, we will define these later
 	private double kP;
