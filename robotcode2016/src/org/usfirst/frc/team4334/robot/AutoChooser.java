@@ -11,7 +11,7 @@ public class AutoChooser extends TimerTask {
         DEFAULT;
     }
     
-    private AutoMode mode;
+    AutoMode mode;
     
     private final SendableChooser chooser;
     
@@ -23,12 +23,14 @@ public class AutoChooser extends TimerTask {
     }
     
     public void getAutoChoice() {
-        mode = (AutoMode) chooser.getSelected();
+        mode = (AutoMode)chooser.getSelected();
     }
     
     public void run() {
         switch(mode) {
-        case DEFAULT: Auto.runDefault();
+        case DEFAULT: Auto.runDefault(); break;
+        
+        default:break;
         }
     }
 }
