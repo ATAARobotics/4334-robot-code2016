@@ -6,37 +6,37 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class NavX {
 
-    private AHRS navx;
+    private static AHRS navx;
     
-    public void init() {
+    public static void init() {
         navx = new AHRS(SPI.Port.kMXP);
     }
     
-    public double getAngle() {
+    public static double getAngle() {
         return navx.getAngle();
     }
     
-    public double getYaw() {
+    public static double getYaw() {
         return (double)navx.getYaw();
     }
     
-    public double getRoll() {
+    public static double getRoll() {
         return (double)navx.getRoll();
     }
     
-    public double getVelocityX() {
+    public static double getVelocityX() {
         return (double)navx.getVelocityX();
     }
     
-    public double getVelocityY() {
+    public static double getVelocityY() {
         return (double)navx.getVelocityY();
     }
     
-    public double getVelocityZ() {
+    public static double getVelocityZ() {
         return (double)navx.getVelocityZ();
     }
     
-    public double getAltitude() {
+    public static double getAltitude() {
         return (double)navx.getAltitude();
     }
     
