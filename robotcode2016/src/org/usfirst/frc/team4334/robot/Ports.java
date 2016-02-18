@@ -15,7 +15,6 @@ public class Ports {
 	public static final int ENCODER_LEFT = 0; // and 1
 	public static final int ENCODER_RIGHT = 2; // and 3 
 	
-	public static final int GYRO = 1; // on protobot is 0 ;
 	public static final int HALL_EFFECT = 0;
 	
 }

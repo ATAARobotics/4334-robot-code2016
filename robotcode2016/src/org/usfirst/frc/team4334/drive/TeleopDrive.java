@@ -17,15 +17,11 @@ public class TeleopDrive implements Loopable{
 		drive = d;
 		joy = driver;
 	}
-	
-	
-	
+
 	public DriveMode currMode = DriveMode.HALO;; 
 	public static enum DriveMode {
 		HALO, ARCADE
 	}
-	
-	
 	
 	public void teleopDrive(){
 		teleopDrive(DriveConstants.JOY_DEADZONE);
@@ -50,8 +46,7 @@ public class TeleopDrive implements Loopable{
 		if(this.currMode == DriveMode.HALO){
 				y1 = mapToNDeg(y1,2);
 				x2 = mapToNDeg(x2,2);
-			//left out = y2 + x1
-			//right out = y2 - x1
+			
 			drive.setDrive((double)y1 + (double) x2, (double)y1 - (double)x2);
 			if(flipped){
 				drive.setDrive((double)y2 + (double)x1, (double)y2 - (double)x1);
@@ -59,7 +54,6 @@ public class TeleopDrive implements Loopable{
 		}
 		
 		if(currMode == DriveMode.ARCADE){
-			//drive with joy a only
 			drive.setDrive(y1 + x1, y1 - x1);
 		}	
 	}
@@ -80,8 +74,6 @@ public class TeleopDrive implements Loopable{
 	@Override
 	public void update() {
 		teleopDrive();
-
-		
 	}
 	
 }
