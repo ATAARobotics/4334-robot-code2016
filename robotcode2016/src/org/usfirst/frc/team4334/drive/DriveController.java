@@ -3,8 +3,7 @@ package org.usfirst.frc.team4334.drive;
 import org.usfirst.frc.team4334.robot.Robot;
 import org.usfirst.frc.team4334.utils.PidController;
 import org.usfirst.frc.team4334.utils.Utils;
-
-import edu.wpi.first.wpilibj.AnalogGyro;
+import org.usfirst.frc.team4334.sensors.NavX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -105,7 +104,7 @@ public class DriveController {
 	}
 	
 	//need to change gyro to navx 
-/**
+
 	public void turnDegreesRel(double degrees){
 		//need to add navx here instead 
 		//turnDegreesAbsolute(gyro.getAngle() + degrees);
@@ -126,7 +125,7 @@ public class DriveController {
 		int initRight = rightEnc.get();
 		while(!atSetpoint && notDisabled()){
 			turnPid.sendValuesToDashboard("turn");
-			double driveErr = Utils.getAngleDifferenceDeg(setPoint,gyro.getAngle());
+			double driveErr = Utils.getAngleDifferenceDeg(setPoint, NavX.getAngle());
 			//System.out.println("turn err " + driveErr + "   set " + setPoint + " actual " + gyro.getAngle());
 			double slaveErr = (leftEnc.get() - initLeft) + (rightEnc.get() - initRight);			
 			double driveOut = turnPid.calculate(driveErr);
@@ -161,7 +160,7 @@ public class DriveController {
 			
 		}
 		drive.setDrive(0, 0);
-	} **/
+	} 
 	
 	
 	
