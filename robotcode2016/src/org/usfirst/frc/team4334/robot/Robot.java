@@ -7,6 +7,7 @@ import org.usfirst.frc.team4334.drive.DriveBase;
 import org.usfirst.frc.team4334.drive.DriveController;
 import org.usfirst.frc.team4334.drive.TeleopDrive;
 import org.usfirst.frc.team4334.subsystems.FlywheelController;
+import org.usfirst.frc.team4334.subsystems.Intake;
 import org.usfirst.frc.team4334.subsystems.IntakeController;
 
 import com.ni.vision.NIVision;
@@ -32,7 +33,7 @@ public class Robot extends IterativeRobot {
     DriveBase driveBase;
 	TeleopDrive teleopDrive;
 
-	IntakeController intake;
+	Intake intake;
 
 	FlywheelController flyControl;
 
@@ -63,7 +64,7 @@ public class Robot extends IterativeRobot {
      	driveBase = new DriveBase(left, right);
      	
      	//create our intake controller 
-    	intake = new IntakeController(Ports.INTAKE);
+    	intake = new Intake(Ports.INTAKE);
 
 
 
@@ -87,10 +88,7 @@ public class Robot extends IterativeRobot {
     	
     }
     
-
-	Thread autoThread;
     public void autonomousInit(){
-    	autoThread = new Thread(new Auto(driveControl));
     	
     }
     
@@ -100,7 +98,6 @@ public class Robot extends IterativeRobot {
     	
     	if(isAutonomous() && isEnabled()){
     		
-    		autoThread.start();
     		Robot.gameState = RobotStates.AUTO;
         	while( isAutonomous() && isEnabled() ){
         		if(isDisabled()){
