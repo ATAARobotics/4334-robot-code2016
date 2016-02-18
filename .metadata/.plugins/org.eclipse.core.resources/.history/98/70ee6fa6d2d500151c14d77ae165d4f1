@@ -1,0 +1,20 @@
+package flywheel;
+
+import edu.wpi.first.wpilibj.Counter;
+
+public class FlyPIDConstants {
+	final int TICKS_PER_WHEEL_ROTATION = 1;
+	final int THREAD_TIME = 100;
+
+	
+	public FlyPIDConstants(Counter HallE){
+		
+	}
+	
+	public int getTicksPerWheelRotation(){
+		return TICKS_PER_WHEEL_ROTATION;
+	}
+	public int getThreadTime(){
+		return THREAD_TIME;
+	}
+}
