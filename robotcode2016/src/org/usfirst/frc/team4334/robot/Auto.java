@@ -14,7 +14,7 @@ public class Auto extends TimerTask {
 	
 
 	public void run() {
-		driveController.turnDegreesRel(180);
+		//driveController.turnDegreesRel(180);
 	}
 	
 	
