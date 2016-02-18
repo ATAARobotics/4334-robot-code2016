@@ -68,8 +68,8 @@ public class Robot extends IterativeRobot {
 
 
     	driveControl = new DriveController(driveBase,
-    			new Encoder(Ports.ENCODER_LEFT, Ports.ENCODER_LEFT + 1,true,EncodingType.k4X)
-    			,new Encoder(Ports.ENCODER_RIGHT, Ports.ENCODER_RIGHT + 1,true,EncodingType.k4X)
+    			new Encoder(Ports.ENCODER_LEFT, Ports.ENCODER_LEFT + 1,true,EncodingType.k4X),
+    			new Encoder(Ports.ENCODER_RIGHT, Ports.ENCODER_RIGHT + 1,true,EncodingType.k4X)
     			);
     	//Counter flyCount = new Counter(Ports.HALL_EFFECT);
     	//flyControl = new FlywheelController(flyCount,new Victor(Ports.SHOOTER));

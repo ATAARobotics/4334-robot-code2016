@@ -16,6 +16,11 @@ public class NavX {
         return navx.getAngle();
     }
     
+    public double getAngleRad(){
+    	
+    }
+    
+    
     public double getYaw() {
         return (double)navx.getYaw();
     }
