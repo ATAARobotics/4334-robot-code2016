@@ -11,11 +11,7 @@ public class Auto extends TimerTask {
 		driveController = d;
 	}
 	
-	
-
 	public void run() {
 		
 	}
-	
-	
 }

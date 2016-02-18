@@ -162,9 +162,6 @@ public class DriveController {
 		drive.setDrive(0, 0);
 	} 
 	
-	
-	
-	
 	public void printEncoders(){
 		SmartDashboard.putNumber("LEFT", leftEnc.get());
 		SmartDashboard.putNumber("RIGHT", rightEnc.get());

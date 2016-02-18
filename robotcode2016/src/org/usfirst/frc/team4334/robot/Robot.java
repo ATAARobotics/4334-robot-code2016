@@ -6,7 +6,7 @@ import org.usfirst.frc.team4334.control.MultiLooper;
 import org.usfirst.frc.team4334.drive.DriveBase;
 import org.usfirst.frc.team4334.drive.DriveController;
 import org.usfirst.frc.team4334.drive.TeleopDrive;
-import org.usfirst.frc.team4334.subsystems.FlywheelController;
+import org.usfirst.frc.team4334.flywheel.FlywheelController;
 import org.usfirst.frc.team4334.subsystems.IntakeController;
 
 import com.ni.vision.NIVision;

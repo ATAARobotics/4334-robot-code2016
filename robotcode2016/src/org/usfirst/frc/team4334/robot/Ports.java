@@ -11,6 +11,9 @@ public class Ports {
 	
 	public static final int SHOOTER = 5;
 	public static final int INTAKE = 4;
+	public static final int ARM = 6;
+	
+	public static final int ARM_POT = 1;
 
 	public static final int ENCODER_LEFT = 0; // and 1
 	public static final int ENCODER_RIGHT = 2; // and 3 
