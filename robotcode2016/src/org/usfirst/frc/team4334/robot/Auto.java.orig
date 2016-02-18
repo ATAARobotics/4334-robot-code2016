@@ -6,9 +6,12 @@ public class Auto {
 	    System.out.println("Dank auto did dank things yay");
 	}
 	
+<<<<<<< HEAD
+	public void run() {
+		
+=======
 	public static void runAuto2() {
 	    System.out.println("DIFFERENT dank auto did things again ayyyyeeeee");
+>>>>>>> d82db53a0ce70d3867831b651106cb15fab674a6
 	}
-	
-	
 }
