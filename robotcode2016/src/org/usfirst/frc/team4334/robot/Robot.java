@@ -6,7 +6,7 @@ import org.usfirst.frc.team4334.control.MultiLooper;
 import org.usfirst.frc.team4334.drive.DriveBase;
 import org.usfirst.frc.team4334.drive.DriveController;
 import org.usfirst.frc.team4334.drive.TeleopDrive;
-import org.usfirst.frc.team4334.subsystems.FlywheelController;
+import org.usfirst.frc.team4334.flywheel.FlywheelController;
 import org.usfirst.frc.team4334.subsystems.Intake;
 import org.usfirst.frc.team4334.subsystems.IntakeController;
 
@@ -89,7 +89,6 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit(){
-    	autoThread = new Thread(new Auto(driveControl));
     	
     }
     
@@ -99,7 +98,6 @@ public class Robot extends IterativeRobot {
     	
     	if(isAutonomous() && isEnabled()){
     		
-    		autoThread.start();
     		Robot.gameState = RobotStates.AUTO;
         	while( isAutonomous() && isEnabled() ){
         		if(isDisabled()){
