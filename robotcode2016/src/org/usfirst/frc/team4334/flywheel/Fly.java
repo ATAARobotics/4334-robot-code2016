@@ -1,19 +1,21 @@
 package org.usfirst.frc.team4334.flywheel;
 
+import org.usfirst.frc.team4334.robot.Ports;
+
 import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.TalonSRX;
 
 public class Fly {
 	private long lastTime;
-	private Counter hallEffect;
+	private static Counter hallEffect = new Counter(Ports.HALL_EFFECT);
 	private double currentRpm;
 	private int lastTicks;
-	private SpeedController s1;
+	private static TalonSRX s1 = new TalonSRX(Ports.SHOOTER);
+	private static TalonSRX s2 = new TalonSRX(Ports.SHOOTER_2);
 	private int desiredRPM;
 	private double holderSpeed;
 	
-	public Fly(Counter hallE, FlyConstants con, FlywheelBangBang bang) {
-		hallEffect = hallE;
+	public Fly() {
 		lastTime = System.currentTimeMillis();
 		lastTicks = hallEffect.get();
 		currentRpm = 0;

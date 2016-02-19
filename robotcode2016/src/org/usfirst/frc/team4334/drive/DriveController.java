@@ -41,20 +41,20 @@ public class DriveController {
 		master.reset();
 		slave.reset();
 
-		int initLeft = leftEnc.get();
-		int initRight = rightEnc.get();
+		int initLeft = drive.getLeftEnc();
+		int initRight = drive.getRightEnc();
 		while (!atSetpoint && notDisabled()) {
 			master.sendValuesToDashboard("master ");
 			slave.sendValuesToDashboard("slave ");
 
 			double driveErr = setPoint - (leftEnc.get() - initLeft);
 			double slaveErr = (leftEnc.get() - initLeft)
-					- (rightEnc.get() - initRight);
+					- (drive.getRightEnc() - initRight);
 			double driveOut = master.calculate(driveErr);
 			double slaveOut = slave.calculate(slaveErr);
 
 			SmartDashboard.putNumber("LEFT", leftEnc.get());
-			SmartDashboard.putNumber("RIGHT", rightEnc.get());
+			SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 			SmartDashboard.putNumber("Err ", driveErr);
 			SmartDashboard.putNumber("Slave Err", slaveErr);
 			SmartDashboard.putNumber("driveOut", driveOut);
@@ -115,7 +115,7 @@ public class DriveController {
 		slave.reset();
 
 		int initLeft = leftEnc.get();
-		int initRight = rightEnc.get();
+		int initRight = drive.getRightEnc();
 		while (!atSetpoint && notDisabled()) {
 			turnPid.sendValuesToDashboard("turn");
 			double driveErr = Utils.getAngleDifferenceDeg(setPoint,
@@ -123,7 +123,7 @@ public class DriveController {
 			// System.out.println("turn err " + driveErr + "   set " + setPoint
 			// + " actual " + gyro.getAngle());
 			double slaveErr = (leftEnc.get() - initLeft)
-					+ (rightEnc.get() - initRight);
+					+ (drive.getRightEnc() - initRight);
 			double driveOut = turnPid.calculate(driveErr);
 			double slaveOut = slave.calculate(slaveErr);
 
@@ -160,7 +160,7 @@ public class DriveController {
 
 	public void printEncoders() {
 		SmartDashboard.putNumber("LEFT", leftEnc.get());
-		SmartDashboard.putNumber("RIGHT", rightEnc.get());
+		SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 	}
 
 	public void calc() {

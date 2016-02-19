@@ -1,12 +1,18 @@
 package org.usfirst.frc.team4334.subsystems;
 
+import org.usfirst.frc.team4334.robot.Ports;
+
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.Victor;
 
 public class Intake {
-private Victor intk;
-	
-	public Intake(int port){
-		intk = new Victor(port);
+private static Victor intk = new Victor(Ports.INTAKE);
+private static Victor elToro = new Victor(Ports.EL_TORRO);
+private static Ultrasonic ultra = new Ultrasonic(Ports.EL_TORRO_ULT_1
+		, Ports.EL_TORRO_ULT_2);
+	public Intake(int intake, int eltor){
+		intk = new Victor(intake);
+		elToro = new Victor(eltor); 
 	}
 	
 	public void setIntake(double pow){
