@@ -9,29 +9,28 @@ import org.usfirst.frc.team4334.utils.Utils;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TeleopDrive implements Loopable {
+public class TeleopDrive {
 	private DriveBase drive;
-	private static Joystick joy = new Joystick(Ports.JOYSTICK_1);
 
 	public TeleopDrive(DriveBase d) {
 		drive = d;
 	}
 
-	public DriveMode currMode = DriveMode.HALO;;
+	public DriveMode currMode = DriveMode.HALO;
 
 	public static enum DriveMode {
 		HALO, ARCADE
 	}
-
-	public void teleopDrive() {
-		teleopDrive(DriveConstants.JOY_DEADZONE);
+	
+	public void teleopDrive(Joystick joy) {
+		teleopDrive(DriveConstants.JOY_DEADZONE,joy);
 	}
 
-	public void teleopDrive(double deadzone) {
-		teleopDrive(DriveConstants.JOY_DEADZONE, this.currMode);
+	public void teleopDrive(double deadzone, Joystick joy) {
+		teleopDrive(DriveConstants.JOY_DEADZONE, this.currMode, joy, 1);
 	}
 
-	public void teleopDrive(double deadzone, DriveMode desiredMode) {
+	public void teleopDrive(double deadzone, DriveMode desiredMode, Joystick joy, double multiplier) {
 		//boolean flipped = Math.abs(joy.getRawAxis(3)) > 0.5 ? true : false;
 		double x1 = Utils.deadzone(joy.getRawAxis(0),
 				DriveConstants.JOY_DEADZONE);
@@ -47,8 +46,11 @@ public class TeleopDrive implements Loopable {
 		if (this.currMode == DriveMode.HALO) {
 			y1 = mapToNDeg(y1, 2);
 			x2 = mapToNDeg(x2, 2);
+			
+			double leftPow = ((double) y1 + (double) x2) * multiplier;
+			double rightPow = ((double) y1 - (double) x2) * multiplier;
 
-			drive.setDrive((double) y1 + (double) x2, (double) y1 - (double) x2);
+			drive.setDrive(leftPow, rightPow);
 //			if (flipped) {
 //				drive.setDrive((double) y2 + (double) x1, (double) y2
 //						- (double) x1);
@@ -70,10 +72,4 @@ public class TeleopDrive implements Loopable {
 		}
 		return 0;
 	}
-
-	@Override
-	public void update() {
-		teleopDrive();
-	}
-
 }
