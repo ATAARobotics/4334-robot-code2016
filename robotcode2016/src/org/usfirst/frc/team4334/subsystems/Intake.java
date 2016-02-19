@@ -9,6 +9,10 @@ private Victor intk;
 		intk = new Victor(port);
 	}
 	
+	public void setIntake(double pow){
+		intk.set(pow);
+	}
+	
 	public void driveIn(){
 		intk.set(-1);
 	}

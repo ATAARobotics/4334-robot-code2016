@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class FlywheelController implements Loopable {
 
 	PidController pid;
-	private Counter hallEffect;
 	private Fly fly;
 	private double setPoint;
 	private double predPow;
@@ -21,8 +20,7 @@ public class FlywheelController implements Loopable {
 	// assuming encoder ticks once per degree and is mounted at flywheel
 	// (probably will not be the case)
 
-	public FlywheelController(Counter hallE, Fly f) {
-		hallEffect = hallE;
+	public FlywheelController(Fly f) {
 		fly = f;
 		pid = new PidController(FlyConstants.kP, FlyConstants.kI,
 				FlyConstants.kD, FlyConstants.intLim, false);

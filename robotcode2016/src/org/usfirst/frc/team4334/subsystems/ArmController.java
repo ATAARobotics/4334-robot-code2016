@@ -6,8 +6,6 @@ import org.usfirst.frc.team4334.utils.PidController;
 public class ArmController implements Loopable {
 	Arm arm = new Arm();
 	
-
-	
 	PidController pid = new PidController(IntakeArmConst.ARM_KP,
 			IntakeArmConst.ARM_KI,
 			IntakeArmConst.ARM_KD,
@@ -34,10 +32,5 @@ public class ArmController implements Loopable {
 	public void update() {
 		double outVal = pid.calculate(getError());
 		arm.setArmPow(outVal);
-	}
-	
-	
-	
-	
-	
+	}	
 }

@@ -38,7 +38,7 @@ public class Fly {
 		double rate = (currentTicks - lastTicks) / changeInTime;
 		lastTicks = currentTicks;
 		// convert to rotations / s
-		//	add a filter 
+		// add a filter 
 		currentRpm = currentRpm * 0.7 + 0.3 * (rate / FlyConstants.TICKS_PER_WHEEL_ROTATION);
 		// convert to rpm
 		currentRpm = (currentRpm * 60) * 1000;
