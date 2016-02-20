@@ -10,10 +10,6 @@ private static Victor intk = new Victor(Ports.INTAKE);
 private static Victor elToro = new Victor(Ports.EL_TORRO);
 private static Ultrasonic ultra = new Ultrasonic(Ports.EL_TORRO_ULT_1
 		, Ports.EL_TORRO_ULT_2);
-	public Intake(int intake, int eltor){
-		intk = new Victor(intake);
-		elToro = new Victor(eltor); 
-	}
 	
 	public void setIntake(double pow){
 		intk.set(pow);

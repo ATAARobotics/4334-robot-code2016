@@ -18,19 +18,35 @@ public class ArmController implements Loopable {
 		setPoint = arm.getPot();
 	}
 	
+	public double setTarget(double setp){
+		pid.reset();
+		return setPoint = setp;
+	}
 
 	public boolean isOnTarget(){
 		return Math.abs(getError()) < IntakeArmConst.ARM_ERR_THRESH;
 	}
-	
-	
+
 	public double getError(){
 		return setPoint - arm.getPot();
 	}
 	
+	
+	boolean pidEnabled = true;
+	public void enablePID(){
+		pidEnabled = true;
+	}
+	
+	public void disabledPID(){
+		pidEnabled = false;
+	}
+	
+	
 	@Override
 	public void update() {
-		double outVal = pid.calculate(getError());
-		arm.setArmPow(outVal);
+		if(pidEnabled){
+			double outVal = pid.calculate(getError());
+			arm.setArmPow(outVal);
+		}
 	}	
 }

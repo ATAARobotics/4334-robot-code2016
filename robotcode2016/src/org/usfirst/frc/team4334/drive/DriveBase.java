@@ -23,19 +23,11 @@ public class DriveBase {
 	private static Encoder rightEnc = new Encoder(Ports.ENCODER_RIGHT,
 			Ports.ENCODER_RIGHT + 1, true, EncodingType.k4X);
 	
-	public DriveBase(LinkedList<SpeedController> leftM, LinkedList<SpeedController> rightM,
-			Counter leftE, Counter rightE){
+	public DriveBase(){
 		leftMotors.add(new TalonSRX(Ports.DRIVE_LEFT_1));
 		leftMotors.add(new TalonSRX(Ports.DRIVE_LEFT_2));
 		rightMotors.add(new TalonSRX(Ports.DRIVE_RIGHT_1));
 		rightMotors.add(new TalonSRX(Ports.DRIVE_RIGHT_2));
-	}
-	
-	public DriveBase(LinkedList<SpeedController> left,
-			LinkedList<SpeedController> right) {
-		rightMotors = left;
-		leftMotors = right;
-
 	}
 
 	public void setLeftPow(double pow){

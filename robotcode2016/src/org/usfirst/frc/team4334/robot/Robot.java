@@ -7,6 +7,7 @@ import org.usfirst.frc.team4334.control.MultiLooper;
 import org.usfirst.frc.team4334.drive.DriveBase;
 import org.usfirst.frc.team4334.drive.DriveController;
 import org.usfirst.frc.team4334.drive.TeleopDrive;
+import org.usfirst.frc.team4334.flywheel.Fly;
 import org.usfirst.frc.team4334.flywheel.FlywheelController;
 import org.usfirst.frc.team4334.subsystems.Arm;
 import org.usfirst.frc.team4334.subsystems.Intake;
@@ -24,15 +25,13 @@ public class Robot extends IterativeRobot {
 
 	CameraServer usbCamServ;
 
-	DriveBase driveBase;
-	TeleopDrive teleopDrive;
-
-	Intake intake;
-
-	FlywheelController flyControl;
-
-	Joystick joyDrive = new Joystick(Ports.JOYSTICK_1);
-	Joystick joyOper = new Joystick(Ports.JOYSTICK_2);
+	DriveBase driveBase = new DriveBase();
+	DriveController driveControl = new DriveController(driveBase);
+	TeleopDrive teleopDrive = new TeleopDrive(driveBase);
+	
+	Intake intake = new Intake();
+	Fly fly = new Fly();
+	FlywheelController flyControl = new FlywheelController(fly);
 
 	Arm arm = new Arm();
 	JoystickController joyControl = new JoystickController(arm, intake,
@@ -49,28 +48,6 @@ public class Robot extends IterativeRobot {
 		usbCamServ.setSize(50);
 		usbCamServ.startAutomaticCapture("cam0");
 		usbCamServ = CameraServer.getInstance();
-
-		// create our drivebase
-		LinkedList<SpeedController> left = new LinkedList<SpeedController>();
-		LinkedList<SpeedController> right = new LinkedList<SpeedController>();
-		left.add(new TalonSRX(Ports.DRIVE_LEFT_1));
-		left.add(new TalonSRX(Ports.DRIVE_LEFT_2));
-		right.add(new TalonSRX(Ports.DRIVE_RIGHT_1));
-		right.add(new TalonSRX(Ports.DRIVE_RIGHT_2));
-		driveBase = new DriveBase(left, right);
-
-		// create our intake controller
-		intake = new Intake(Ports.INTAKE);
-
-		driveControl = new DriveController(driveBase, new Encoder(
-				Ports.ENCODER_LEFT, Ports.ENCODER_LEFT + 1, true,
-				EncodingType.k4X), new Encoder(Ports.ENCODER_RIGHT,
-				Ports.ENCODER_RIGHT + 1, true, EncodingType.k4X));
-		// Counter flyCount = new Counter(Ports.HALL_EFFECT);
-		// flyControl = new FlywheelController(flyCount,new
-		// Victor(Ports.SHOOTER));
-
-		teleopDrive = new TeleopDrive(driveBase, joyDrive);
 	}
 
 	public void disabled() {
@@ -85,7 +62,6 @@ public class Robot extends IterativeRobot {
 
 	}
 
-	DriveController driveControl;
 	MultiLooper autoLooper = new MultiLooper("auto ", 200);
 
 	public void autonomousPeriodic() {
@@ -114,12 +90,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	MultiLooper teleLooper = new MultiLooper("tele looper", 0.05);
+	
 	boolean firstRun = true;
-
 	public void teleopInit() {
 		if (firstRun) {
-			teleLooper.addLoopable(new TeleopDrive(driveBase, joyDrive));
-
+			teleLooper.addLoopable(joyControl);
+			teleLooper.addLoopable(flyControl);
 			firstRun = false;
 		}
 		Robot.gameState = RobotStates.TELEOP;
@@ -131,6 +107,7 @@ public class Robot extends IterativeRobot {
 		while (isOperatorControl() && isEnabled()) {
 			Timer.delay(0.02);
 		}
+		Robot.gameState = RobotStates.DISABLED;
 		teleLooper.stop();
 	}
 }

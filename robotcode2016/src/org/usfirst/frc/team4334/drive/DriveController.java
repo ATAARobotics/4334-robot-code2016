@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveController {
 	DriveBase drive;
-	Encoder leftEnc;
-	Encoder rightEnc;
 
 	PidController master = new PidController(DriveConstants.DRIVE_KP,
 			DriveConstants.DRIVE_KI, DriveConstants.DRIVE_KD,
@@ -25,10 +23,8 @@ public class DriveController {
 			DriveConstants.TURN_KI, DriveConstants.TURN_KD,
 			DriveConstants.TURN_INT_LIM, true);
 
-	public DriveController(DriveBase dr, Encoder left, Encoder right) {
+	public DriveController(DriveBase dr) {
 		drive = dr;
-		leftEnc = left;
-		rightEnc = right;
 	}
 
 	public void driveFeet(double feet) {
@@ -47,13 +43,13 @@ public class DriveController {
 			master.sendValuesToDashboard("master ");
 			slave.sendValuesToDashboard("slave ");
 
-			double driveErr = setPoint - (leftEnc.get() - initLeft);
-			double slaveErr = (leftEnc.get() - initLeft)
+			double driveErr = setPoint - (drive.getLeftEnc() - initLeft);
+			double slaveErr = (drive.getLeftEnc() - initLeft)
 					- (drive.getRightEnc() - initRight);
 			double driveOut = master.calculate(driveErr);
 			double slaveOut = slave.calculate(slaveErr);
 
-			SmartDashboard.putNumber("LEFT", leftEnc.get());
+			SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 			SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 			SmartDashboard.putNumber("Err ", driveErr);
 			SmartDashboard.putNumber("Slave Err", slaveErr);
@@ -114,7 +110,7 @@ public class DriveController {
 		turnPid.reset();
 		slave.reset();
 
-		int initLeft = leftEnc.get();
+		int initLeft = drive.getLeftEnc();
 		int initRight = drive.getRightEnc();
 		while (!atSetpoint && notDisabled()) {
 			turnPid.sendValuesToDashboard("turn");
@@ -122,7 +118,7 @@ public class DriveController {
 					NavX.getAngle());
 			// System.out.println("turn err " + driveErr + "   set " + setPoint
 			// + " actual " + gyro.getAngle());
-			double slaveErr = (leftEnc.get() - initLeft)
+			double slaveErr = (drive.getLeftEnc() - initLeft)
 					+ (drive.getRightEnc() - initRight);
 			double driveOut = turnPid.calculate(driveErr);
 			double slaveOut = slave.calculate(slaveErr);
@@ -159,7 +155,7 @@ public class DriveController {
 	}
 
 	public void printEncoders() {
-		SmartDashboard.putNumber("LEFT", leftEnc.get());
+		SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 		SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 	}
 
