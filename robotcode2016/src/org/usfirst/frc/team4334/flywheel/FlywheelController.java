@@ -78,7 +78,8 @@ public class FlywheelController implements Loopable {
 
 	@Override
 	public void update() {
-
+		System.out.println("fly controller being called ");
+		calculate();
 	}
 
 }

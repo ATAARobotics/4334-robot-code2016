@@ -14,6 +14,7 @@ public class NavX {
     
     public static double getAngle() {
         return navx.getAngle();
+   
     }
     
     public static double getYaw() {

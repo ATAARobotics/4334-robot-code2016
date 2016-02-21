@@ -1,34 +1,36 @@
 package org.usfirst.frc.team4334.control;
 
 import org.usfirst.frc.team4334.drive.DriveBase;
-import org.usfirst.frc.team4334.drive.DriveConstants;
 import org.usfirst.frc.team4334.drive.TeleopDrive;
 import org.usfirst.frc.team4334.flywheel.FlywheelController;
+import org.usfirst.frc.team4334.robot.Ports;
 import org.usfirst.frc.team4334.subsystems.Arm;
+import org.usfirst.frc.team4334.subsystems.ArmController;
 import org.usfirst.frc.team4334.subsystems.Intake;
 import org.usfirst.frc.team4334.utils.Utils;
 
 import edu.wpi.first.wpilibj.Joystick;
 
 public class JoystickController implements Loopable {
-	private Joystick driver;
-	private Joystick operator;
-
-	private Arm arm;
+	private static Joystick driver = new Joystick(Ports.JOYSTICK_1);
+	private static Joystick operator = new Joystick(Ports.JOYSTICK_2);
+	
 	private Intake intake;
 	private FlywheelController flyControl;
 	private DriveBase drive;
 	private TeleopDrive teleDrive;
-	
-	private boolean ghettoShiftFlag;
+	private ArmController armControl;
+	private boolean ghettoShiftFlag = false;
 	private boolean driverPre = false;
 
-	public JoystickController(Arm a, Intake i, FlywheelController fly, DriveBase d) {
-		arm = a;
+	public JoystickController(Intake i, FlywheelController fly, DriveBase d,
+			ArmController armContrl) {
+		System.out.println("joystick constructor called");
 		intake = i;
 		flyControl = fly;
 		drive = d;
 		teleDrive = new TeleopDrive(drive);
+		armControl = armContrl;
 	}
 
 	public enum XboxMap {
@@ -51,30 +53,30 @@ public class JoystickController implements Loopable {
 
 	@Override
 	public void update() {
-
+		System.out.println("update joy");
 		// DRIVER
-	    
-	    //Toggle ghetto shift mode
-	    if(!driverPre){
-	        if(driver.getRawButton(XboxMap.B.mappedVal()) && !ghettoShiftFlag) {
-	            ghettoShiftFlag = true;
-	            driverPre = true;
-	        }
-	        else if(driver.getRawButton(XboxMap.B.mappedVal()) && ghettoShiftFlag) {
-	            ghettoShiftFlag = false;
-	            driverPre = true;
-	        }
-	        else if(!driver.getRawButton(XboxMap.B.mappedVal())) {
-	            driverPre = false;
-	        }
-	    }
-	    
-	    if(ghettoShiftFlag) {
-	        teleDrive.teleopDrive(DriveConstants.JOY_DEADZONE, TeleopDrive.DriveMode.HALO, driver, 0.5);
-	    }
-	    else if(!ghettoShiftFlag) {
-	        teleDrive.teleopDrive(driver);
-	    }
+
+		// Toggle ghetto shift mode
+		if (!driverPre) {
+			if (driver.getRawButton(XboxMap.B.mappedVal()) 
+					&& !ghettoShiftFlag) {
+				ghettoShiftFlag = true;
+				driverPre = true;
+			} else if (driver.getRawButton(XboxMap.B.mappedVal())
+					&& ghettoShiftFlag) {
+				ghettoShiftFlag = false;
+				driverPre = true;
+			}
+		}
+		if (!driver.getRawButton(XboxMap.B.mappedVal())) {
+			driverPre = false;
+		}
+
+		if (ghettoShiftFlag) {
+			teleDrive.teleopDrive(driver, 0.5);
+		} else {
+			teleDrive.teleopDrive(driver);
+		}
 
 		// flywheel
 		// Spin-up(x for obstacle, a for batter)
@@ -84,22 +86,28 @@ public class JoystickController implements Loopable {
 			flyControl.setFlySpeedObj();
 		}
 
+		if (operator.getRawButton(XboxMap.RB.mappedVal())) {
+			armControl.setUp();
+		} else if (operator.getRawButton(XboxMap.LB.mappedVal())) {
+			armControl.setDown();
+		} else {
+			double opLeftT = operator.getRawAxis(XboxMap.TL.mappedVal());
+			double opRightT = operator.getRawAxis(XboxMap.TR.mappedVal());
+			
+			opLeftT = Utils.deadzone(opLeftT, JoyConstants.ARM_DEADZONE);
+			opRightT = Utils.deadzone(opRightT, JoyConstants.ARM_DEADZONE);
+			//armControl.setPow(opLeftT - opRightT);
+		}
+
 		// arm
 		// shoot A
 
 		// intake
-		if(driver.getRawButton(XboxMap.A.mappedVal())){
+		if (driver.getRawButton(XboxMap.A.mappedVal())) {
 			intake.setIntake(1);
-		} else{
+		} else {
 			intake.setIntake(operator.getRawAxis(XboxMap.SLY.mappedVal()));
 		}
-		
-		double opLeftT = operator.getRawAxis(XboxMap.TL.mappedVal()) - 0.5;
-		double opRightT = operator.getRawAxis(XboxMap.TR.mappedVal()) - 0.5;
-		opLeftT = Utils.deadzone(opLeftT, JoyConstants.ARM_DEADZONE);
-		opRightT = Utils.deadzone(opRightT, JoyConstants.ARM_DEADZONE);
-		arm.setArmPow(opLeftT - opRightT);
 
 	}
-
 }

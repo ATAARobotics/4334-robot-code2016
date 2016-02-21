@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutoChooser extends TimerTask {
     
     private enum AutoMode {
-        DEFAULT;
+        DEFAULT,
+        ONE_BALL_LOW_BAR;
     }
     
     AutoMode mode;
@@ -29,7 +30,7 @@ public class AutoChooser extends TimerTask {
     public void run() {
         switch(mode) {
         case DEFAULT: Auto.runDefault(); break;
-        
+        case ONE_BALL_LOW_BAR: Auto.runAutoLowBarOneBall(); break;
         default:break;
         }
     }

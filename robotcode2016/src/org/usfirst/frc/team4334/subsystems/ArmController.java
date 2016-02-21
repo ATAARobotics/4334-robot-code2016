@@ -4,49 +4,62 @@ import org.usfirst.frc.team4334.control.Loopable;
 import org.usfirst.frc.team4334.utils.PidController;
 
 public class ArmController implements Loopable {
-	Arm arm = new Arm();
-	
+	static Arm arm = new Arm();
+
 	PidController pid = new PidController(IntakeArmConst.ARM_KP,
-			IntakeArmConst.ARM_KI,
-			IntakeArmConst.ARM_KD,
-			IntakeArmConst.ARM_INT_LIM,
-			false);
+			IntakeArmConst.ARM_KI, IntakeArmConst.ARM_KD,
+			IntakeArmConst.ARM_INT_LIM, false);
 
 	double setPoint;
-	
-	public ArmController(){
+
+	public ArmController() {
 		setPoint = arm.getPot();
 	}
-	
-	public double setTarget(double setp){
+
+	public void setUp() {
+		enablePID();
+		setTarget(IntakeArmConst.ARM_UP);
+	}
+
+	public void setDown() {
+		enablePID();
+		setTarget(IntakeArmConst.ARM_DOWN);
+	}
+
+	public double setTarget(double setp) {
 		pid.reset();
 		return setPoint = setp;
 	}
 
-	public boolean isOnTarget(){
+	public boolean isOnTarget() {
 		return Math.abs(getError()) < IntakeArmConst.ARM_ERR_THRESH;
 	}
 
-	public double getError(){
+	public double getError() {
 		return setPoint - arm.getPot();
 	}
-	
-	
+
 	boolean pidEnabled = true;
-	public void enablePID(){
+
+	public void enablePID() {
 		pidEnabled = true;
 	}
-	
-	public void disabledPID(){
+
+	public void disablePID() {
 		pidEnabled = false;
 	}
-	
-	
+
+	public void setPow(double outPow) {
+		disablePID();
+		arm.setArmPow(outPow);
+	}
+
 	@Override
 	public void update() {
-		if(pidEnabled){
+		pid.sendValuesToDashboard("arm_control_");
+		if (pidEnabled) {
 			double outVal = pid.calculate(getError());
 			arm.setArmPow(outVal);
 		}
-	}	
+	}
 }

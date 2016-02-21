@@ -12,6 +12,7 @@ public class MultiLooper implements Loopable {
 
     public void update() {
         int i;
+ 
         for (i = 0; i < loopables.size(); ++i) {
             Loopable c = loopables.elementAt(i);
             if (c != null) {

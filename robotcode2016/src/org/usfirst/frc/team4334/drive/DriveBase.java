@@ -16,14 +16,16 @@ public class DriveBase {
 	private LinkedList<SpeedController> rightMotors;
 	private LinkedList<SpeedController> leftMotors;
 	
-	private static Encoder leftEnc = new Encoder(
+	/**private static Encoder leftEnc = new Encoder(
 			Ports.ENCODER_LEFT, Ports.ENCODER_LEFT + 1, true,
 			EncodingType.k4X);
 	
 	private static Encoder rightEnc = new Encoder(Ports.ENCODER_RIGHT,
-			Ports.ENCODER_RIGHT + 1, true, EncodingType.k4X);
+			Ports.ENCODER_RIGHT + 1, true, EncodingType.k4X);**/
 	
 	public DriveBase(){
+		rightMotors = new LinkedList<SpeedController>();
+		leftMotors = new LinkedList<SpeedController>();
 		leftMotors.add(new TalonSRX(Ports.DRIVE_LEFT_1));
 		leftMotors.add(new TalonSRX(Ports.DRIVE_LEFT_2));
 		rightMotors.add(new TalonSRX(Ports.DRIVE_RIGHT_1));
@@ -48,11 +50,11 @@ public class DriveBase {
 	}
 
 	public int getRightEnc(){
-		return rightEnc.get();
+		return 0;//rightEnc.get();
 	}
 	
 	public int getLeftEnc(){
-		return leftEnc.get();
+		return 0;//leftEnc.get();
 	}
 	
 }

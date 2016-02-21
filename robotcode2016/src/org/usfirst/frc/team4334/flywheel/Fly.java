@@ -2,16 +2,16 @@ package org.usfirst.frc.team4334.flywheel;
 
 import org.usfirst.frc.team4334.robot.Ports;
 
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.TalonSRX;
 
 public class Fly {
 	private long lastTime;
 	private static Counter hallEffect = new Counter(Ports.HALL_EFFECT);
 	private double currentRpm;
-	private int lastTicks;
-	private static TalonSRX s1 = new TalonSRX(Ports.SHOOTER);
-	private static TalonSRX s2 = new TalonSRX(Ports.SHOOTER_2);
+	private double lastTicks;
+	private static CANTalon s1 = new CANTalon(Ports.SHOOTER);
+	private static CANTalon s2 = new CANTalon(Ports.SHOOTER_2);
 	private int desiredRPM;
 	private double holderSpeed;
 	
@@ -26,27 +26,37 @@ public class Fly {
 		if (pow < 0) {
 			pow = 0;
 		}
-		s1.set(pow);
-
+		s1.set(-pow);
+		s2.set(-pow);
 	}
 
 	public double getRpm() {
 		double changeInTime = (System.currentTimeMillis() - lastTime);
+
+		System.out.println("get rpm called");
 		if(changeInTime < FlyConstants.RPM_REFRESH_TIME){
-			return changeInTime;
+			return currentRpm;
 		}
+		lastTime = System.currentTimeMillis();
+		
 		// ticks / ms
-		int currentTicks = hallEffect.get();
-		double rate = (currentTicks - lastTicks) / changeInTime;
+		double currentTicks = hallEffect.get();
+		double rate;
+
+	
+		rate = (currentTicks - lastTicks) / changeInTime;
+
+		if(rate <= 0){
+			return 0;
+		}
 		lastTicks = currentTicks;
 		// convert to rotations / s
 		// add a filter 
-		currentRpm = currentRpm * 0.7 + 0.3 * (rate / FlyConstants.TICKS_PER_WHEEL_ROTATION);
-		// convert to rpm
-		currentRpm = (currentRpm * 60) * 1000;
-		System.out.println("fly speed = " + currentRpm);
+			// convert to rpm
+		double preCalcRPM = (rate / FlyConstants.TICKS_PER_WHEEL_ROTATION) * 60 * 1000;
+		currentRpm = currentRpm * 0.6 + 0.4 *  preCalcRPM;
+
 		holderSpeed = currentRpm;
 		return currentRpm;
-
 	}
 }

@@ -10,5 +10,8 @@ public class Auto {
 	    System.out.println("DIFFERENT dank auto did things again ayyyyeeeee");
 	}
 	
+	public static void runAutoLowBarOneBall(){
+		
+	}
 	
 }
