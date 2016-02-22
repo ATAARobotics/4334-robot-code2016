@@ -96,7 +96,7 @@ public class DriveController {
 
 	public void turnDegreesRel(double degrees) {
 		// need to add navx here instead
-		// turnDegreesAbsolute(gyro.getAngle() + degrees);
+		turnDegreesAbsolute(NavX.getAngle() + degrees);
 	}
 
 	public void turnDegreesAbsolute(double degrees) {

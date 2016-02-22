@@ -3,6 +3,8 @@ package org.usfirst.frc.team4334.subsystems;
 import org.usfirst.frc.team4334.control.Loopable;
 import org.usfirst.frc.team4334.utils.PidController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class ArmController implements Loopable {
 	static Arm arm = new Arm();
 
@@ -52,11 +54,28 @@ public class ArmController implements Loopable {
 	public void setPow(double outPow) {
 		disablePID();
 		arm.setArmPow(outPow);
+		setPoint = arm.getPot();
 	}
+	
+	public void startPIDHold(){
+		setPoint = arm.getPot();
+		enablePID();
+	}
+	
+	public void setSetPoint(double increment){
+		double nextVal = setPoint + increment ;			
+	}
+	
+	public void holdCurrSetpoint(){
+		setPoint = arm.getPot();
+	}
+	
 
 	@Override
 	public void update() {
 		pid.sendValuesToDashboard("arm_control_");
+		SmartDashboard.putNumber("setpoint", setPoint);
+		SmartDashboard.putNumber("arm_pot", arm.getPot());
 		if (pidEnabled) {
 			double outVal = pid.calculate(getError());
 			arm.setArmPow(outVal);

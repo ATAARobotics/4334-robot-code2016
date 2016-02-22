@@ -4,12 +4,14 @@ import org.usfirst.frc.team4334.drive.DriveBase;
 import org.usfirst.frc.team4334.drive.TeleopDrive;
 import org.usfirst.frc.team4334.flywheel.FlywheelController;
 import org.usfirst.frc.team4334.robot.Ports;
+import org.usfirst.frc.team4334.sensors.NavX;
 import org.usfirst.frc.team4334.subsystems.Arm;
 import org.usfirst.frc.team4334.subsystems.ArmController;
 import org.usfirst.frc.team4334.subsystems.Intake;
 import org.usfirst.frc.team4334.utils.Utils;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JoystickController implements Loopable {
 	private static Joystick driver = new Joystick(Ports.JOYSTICK_1);
@@ -51,9 +53,12 @@ public class JoystickController implements Loopable {
 		}
 	};
 
+	
+
 	@Override
 	public void update() {
-		System.out.println("update joy");
+		SmartDashboard.putNumber("navx ", NavX.getAngle());
+
 		// DRIVER
 
 		// Toggle ghetto shift mode
@@ -84,19 +89,36 @@ public class JoystickController implements Loopable {
 			flyControl.setFlySpeedBatter();
 		} else if (operator.getRawButton(XboxMap.X.mappedVal())) {
 			flyControl.setFlySpeedObj();
+		} else if (operator.getRawButton(XboxMap.B.mappedVal())){
+			flyControl.setFlySpeed(0, 0);
 		}
 
-		if (operator.getRawButton(XboxMap.RB.mappedVal())) {
+		boolean toggled = true;
+		if (operator.getRawButton(XboxMap.LB.mappedVal())) {
 			armControl.setUp();
-		} else if (operator.getRawButton(XboxMap.LB.mappedVal())) {
+			toggled = true;
+		} else if (operator.getRawButton(XboxMap.RB.mappedVal())) {
 			armControl.setDown();
+			toggled = true;
 		} else {
 			double opLeftT = operator.getRawAxis(XboxMap.TL.mappedVal());
 			double opRightT = operator.getRawAxis(XboxMap.TR.mappedVal());
 			
-			opLeftT = Utils.deadzone(opLeftT, JoyConstants.ARM_DEADZONE);
-			opRightT = Utils.deadzone(opRightT, JoyConstants.ARM_DEADZONE);
-			//armControl.setPow(opLeftT - opRightT);
+
+				opLeftT = Utils.deadzone(opLeftT, JoyConstants.ARM_DEADZONE);
+				opRightT = Utils.deadzone(opRightT, JoyConstants.ARM_DEADZONE);
+			
+				if(opLeftT > 0.1 || opRightT > 0.1){
+					toggled = false;
+					armControl.setPow(opLeftT - opRightT);
+				} else{
+					if(toggled){
+						armControl.enablePID();
+					}else{
+						armControl.startPIDHold();
+					}
+					
+				}
 		}
 
 		// arm
@@ -106,7 +128,8 @@ public class JoystickController implements Loopable {
 		if (driver.getRawButton(XboxMap.A.mappedVal())) {
 			intake.setIntake(1);
 		} else {
-			intake.setIntake(operator.getRawAxis(XboxMap.SLY.mappedVal()));
+			double y1 = Utils.deadzone(operator.getRawAxis(XboxMap.SLY.mappedVal()), JoyConstants.ARM_DEADZONE);
+			intake.setIntakTillStop(y1);
 		}
 
 	}

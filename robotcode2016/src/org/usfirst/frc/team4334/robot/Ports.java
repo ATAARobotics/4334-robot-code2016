@@ -18,8 +18,8 @@ public class Ports {
 	public static final int INTAKE = 2;
 	public static final int EL_TORRO = 5;
 	
-	//public static final int EL_TORRO_PUSH = 0;
-	
+	public static final int EL_TORRO_ULT = 2;
+	public static final int EL_TORRO_ULT_2 = 3;
 	public static final int ARM_POT = 0;
 
 	public static final int ENCODER_LEFT = 2; // and 1

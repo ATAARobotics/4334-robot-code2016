@@ -14,6 +14,7 @@ import org.usfirst.frc.team4334.subsystems.Intake;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
@@ -98,6 +99,8 @@ public class Robot extends IterativeRobot {
 		System.out.println("starting loopables");
 		teleLooper.start();
 		while (isOperatorControl() && isEnabled()) {
+			SmartDashboard.putNumber("encoder L", driveBase.getLeftEnc());
+			SmartDashboard.putNumber("encoder R", driveBase.getLeftEnc());
 			Timer.delay(0.02);
 		}
 		Robot.gameState = RobotStates.DISABLED;

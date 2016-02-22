@@ -6,11 +6,8 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class NavX {
 
-    private static AHRS navx;
+    private static AHRS navx = new AHRS(SPI.Port.kMXP);
     
-    public static void init() {
-        navx = new AHRS(SPI.Port.kMXP);
-    }
     
     public static double getAngle() {
         return navx.getAngle();

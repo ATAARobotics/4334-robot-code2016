@@ -4,8 +4,10 @@ import org.usfirst.frc.team4334.utils.PidController;
 
 public class DriveConstants {
 	public static final double JOY_DEADZONE = 0.2;
-	public static final double TICKS_PER_FEET = 75;
-	public static final int    THREAD_SLEEP_MS = 20;
+	public static final double TICKS_PER_INCH = (2 * Math.PI * 4);
+	public static final double TICKS_PER_FEET = TICKS_PER_INCH * 12;
+
+	public static final int THREAD_SLEEP_MS = 20;
 	
 	public static final int SATISFY_TIME_MS = 500;
 	public static final int SATISFY_TIME_TURN = 500;
