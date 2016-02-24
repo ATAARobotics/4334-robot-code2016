@@ -10,8 +10,16 @@ public class NavX {
     
     
     public static double getAngle() {
-        return navx.getAngle();
-   
+        return navx.getAngle();   
+    }
+    
+    public static boolean isCalibrating(){
+    	
+    	return navx.isCalibrating();
+    }
+    
+    public static void reset(){
+    	navx.reset();
     }
     
     public static double getYaw() {

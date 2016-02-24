@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4334.subsystems;
 
 public class IntakeArmConst {
-	public static double ARM_KP = 5;
+	public static double ARM_KP = 1.5;
 	public static double ARM_KI = 0.001;
 	public static double ARM_KD = 0;
 	public static double ARM_INT_LIM = 0.4 / ARM_KI;
@@ -14,4 +14,7 @@ public class IntakeArmConst {
 	
 	public static double ARM_UP = 4.375;
 	public static double ARM_DOWN = 3.35;
+	
+	public static double ARM_CHEVAL = 3.35;
+	
 }

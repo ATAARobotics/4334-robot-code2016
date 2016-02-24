@@ -33,7 +33,6 @@ public class Fly {
 	public double getRpm() {
 		double changeInTime = (System.currentTimeMillis() - lastTime);
 
-		System.out.println("get rpm called");
 		if(changeInTime < FlyConstants.RPM_REFRESH_TIME){
 			return currentRpm;
 		}

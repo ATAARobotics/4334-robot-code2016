@@ -78,6 +78,9 @@ public class ArmController implements Loopable {
 		SmartDashboard.putNumber("arm_pot", arm.getPot());
 		if (pidEnabled) {
 			double outVal = pid.calculate(getError());
+			if(setPoint > arm.getPot()){
+				outVal /= 2;
+			}
 			arm.setArmPow(outVal);
 		}
 	}

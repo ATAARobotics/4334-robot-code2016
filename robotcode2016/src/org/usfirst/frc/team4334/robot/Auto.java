@@ -2,31 +2,52 @@ package org.usfirst.frc.team4334.robot;
 
 import org.usfirst.frc.team4334.drive.DriveController;
 import org.usfirst.frc.team4334.flywheel.FlywheelController;
-import org.usfirst.frc.team4334.subsystems.IntakeController;
+import org.usfirst.frc.team4334.subsystems.ArmController;
+import org.usfirst.frc.team4334.subsystems.Intake;
 
-public class Auto {
+public class Auto implements Runnable{
    
 	static DriveController drive;
-	static IntakeController intake;
+	static Intake intake;
 	static FlywheelController fly;
-	public Auto(DriveController dr, IntakeController intk, FlywheelController fl){
+	static ArmController arm;
+	public Auto(DriveController dr, Intake intk, FlywheelController fl, ArmController a){
 		drive = dr;
 		fly = fl;
 		intake = intk;
+		arm = a;
 	}
 	
 	
 	public static void runDefault() {
-	    System.out.println("Dank auto did dank things yay");
+		
 	}
 	
 	public static void runAuto2() {
-	    System.out.println("DIFFERENT dank auto did things again ayyyyeeeee");
+		
 	}
 	
 	public static void runAutoLowBarOneBall(){
-		drive.driveFeet(5);
-		drive.driveFeet(-5);
+		System.out.println("running auto ");
+		
+//		fly.setFlySpeedBatter();
+//		
+//		drive.driveFeet(13);
+//		drive.turnDegreesRel(20);
+//		drive.driveFeet(3);
+//		drive.turnDegreesRel(47);
+//		drive.driveFeet(9);
+//		
+//		intake.driveIn();
+	}
+
+
+	@Override
+	public void run() {
+		drive.arcTurn(4, 90, true);
+		runAutoLowBarOneBall();
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

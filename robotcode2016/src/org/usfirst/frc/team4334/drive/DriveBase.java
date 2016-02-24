@@ -1,35 +1,33 @@
 package org.usfirst.frc.team4334.drive;
 
 import java.util.LinkedList;
-import java.util.TimerTask;
 
 import org.usfirst.frc.team4334.robot.Ports;
 
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveBase {
 
 	private LinkedList<SpeedController> rightMotors;
 	private LinkedList<SpeedController> leftMotors;
 	
-	/**private static Encoder leftEnc = new Encoder(
-			Ports.ENCODER_LEFT, Ports.ENCODER_LEFT + 1, true,
+	private static Encoder leftEnc = new Encoder(
+			Ports.ENCODER_LEFT, Ports.ENCODER_LEFT_2, true,
 			EncodingType.k4X);
 	
 	private static Encoder rightEnc = new Encoder(Ports.ENCODER_RIGHT,
-			Ports.ENCODER_RIGHT + 1, true, EncodingType.k4X);**/
+			Ports.ENCODER_RIGHT_2, true, EncodingType.k4X);
 	
 	public DriveBase(){
 		rightMotors = new LinkedList<SpeedController>();
 		leftMotors = new LinkedList<SpeedController>();
-		leftMotors.add(new TalonSRX(Ports.DRIVE_LEFT_1));
-		leftMotors.add(new TalonSRX(Ports.DRIVE_LEFT_2));
-		rightMotors.add(new TalonSRX(Ports.DRIVE_RIGHT_1));
-		rightMotors.add(new TalonSRX(Ports.DRIVE_RIGHT_2));
+		leftMotors.add(new VictorSP(Ports.DRIVE_LEFT_1));
+		leftMotors.add(new VictorSP(Ports.DRIVE_LEFT_2));
+		rightMotors.add(new VictorSP(Ports.DRIVE_RIGHT_1));
+		rightMotors.add(new VictorSP(Ports.DRIVE_RIGHT_2));
 	}
 
 	public void setLeftPow(double pow){
@@ -50,11 +48,11 @@ public class DriveBase {
 	}
 
 	public int getRightEnc(){
-		return 0;//rightEnc.get();
+		return -rightEnc.get();
 	}
 	
 	public int getLeftEnc(){
-		return 0;//leftEnc.get();
+		return -leftEnc.get();
 	}
 	
 }

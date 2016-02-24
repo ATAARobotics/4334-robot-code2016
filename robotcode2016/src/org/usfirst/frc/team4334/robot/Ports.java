@@ -22,8 +22,10 @@ public class Ports {
 	public static final int EL_TORRO_ULT_2 = 3;
 	public static final int ARM_POT = 0;
 
-	public static final int ENCODER_LEFT = 2; // and 1
-	public static final int ENCODER_RIGHT = 3; // and 3 
+	public static final int ENCODER_RIGHT = 4;
+	public static final int ENCODER_RIGHT_2 = 5;
+	public static final int ENCODER_LEFT = 6;
+	public static final int ENCODER_LEFT_2 = 7;
 	
 	public static final int HALL_EFFECT = 1;
 	

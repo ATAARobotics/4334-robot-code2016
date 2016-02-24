@@ -14,14 +14,15 @@ public class Utils {
 		return input;
 	}
 	
-	public static double signedMod(double a, double b){
-		return a - Math.floor(a/b) * b;
+	public static double signedMod(double a, double n){
+		return (a % n + n) % n;
 	}
 	
 
 	public static double getAngleDifferenceDeg(double target, double source){
 		double a = target - source;
-		return Utils.signedMod(a + 180, 360) - 180;
+		a = signedMod((a + 180), 360) - 180;
+		return a;
 	}
 	
 	public static double getAngleDifferenceRad(double target, double source){

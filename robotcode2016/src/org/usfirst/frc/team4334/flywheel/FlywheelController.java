@@ -79,7 +79,6 @@ public class FlywheelController implements Loopable {
 	@Override
 	public void update() {
 		FlyConstants.debugRpms();
-		System.out.println("fly controller being called ");
 		calculate();
 	}
 

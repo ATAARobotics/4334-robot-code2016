@@ -15,7 +15,7 @@ public class FlyConstants {
 	
 	
 	//RPMS
-	 static double RPM_ON_BATTER = 6000;
+	 static double RPM_ON_BATTER = 7800;
 	 static double POW_ON_BATTER = 0.7;
 	
 	 static double RPM_OBST = 8000;
