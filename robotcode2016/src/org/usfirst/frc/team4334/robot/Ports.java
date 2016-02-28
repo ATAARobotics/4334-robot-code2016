@@ -29,4 +29,12 @@ public class Ports {
 	
 	public static final int HALL_EFFECT = 1;
 	
+	
+	
+	public void changePortsForPrac(){
+		//
+	}
+	
+	
+	
 }

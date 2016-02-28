@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 public class Arm {
 	private static CANTalon motor = new CANTalon(Ports.ARM);
 	private static CANTalon motor2 = new CANTalon(Ports.ARM_2);
-	private static AnalogInput pot = new AnalogInput(Ports.ARM_POT);
+	//private static AnalogInput pot = new AnalogInput(Ports.ARM_POT);
 	
 	public void setArmPow(double pow){
 		if(Math.abs(pow) > IntakeArmConst.ARM_MAX_POW){
@@ -19,7 +19,7 @@ public class Arm {
 	}
 	
 	public double getPot(){
-		return pot.getVoltage();
+		return 0; // pot.getVoltage();
 	}	
 	
 }

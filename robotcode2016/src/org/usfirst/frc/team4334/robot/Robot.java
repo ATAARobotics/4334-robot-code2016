@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-
+	public static final boolean isCompBot = false;
 
 	DriveBase driveBase = new DriveBase();
 	DriveController driveControl = new DriveController(driveBase);
@@ -74,8 +74,7 @@ public class Robot extends IterativeRobot {
 			autoThread.run();
 			while (isAutonomous() && isEnabled()) {
 				if (isDisabled()) {
-			
-					
+					Robot.gameState = RobotStates.DISABLED;
 				}
 				
 			}	
@@ -103,7 +102,7 @@ public class Robot extends IterativeRobot {
 		if (firstRun) {
 			teleLooper.addLoopable(joyControl);
 			teleLooper.addLoopable(flyControl);
-			teleLooper.addLoopable(armControl);
+		//	teleLooper.addLoopable(armControl);
 		
 			firstRun = false;
 		}
