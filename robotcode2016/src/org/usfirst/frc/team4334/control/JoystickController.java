@@ -108,11 +108,12 @@ public class JoystickController implements Loopable {
 				toggled = false;
 				armControl.setPow(opLeftT - opRightT);
 			} else {
-				if (toggled) {
-					armControl.enablePID();
-				} else {
-					armControl.startPIDHold();
-				}
+				armControl.setPow(0);
+//				if (toggled) {
+//					armControl.enablePID();
+//				} else {
+//					armControl.startPIDHold();
+//				}
 			}
 		}
 

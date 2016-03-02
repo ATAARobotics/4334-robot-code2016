@@ -20,7 +20,7 @@ public class Robot extends IterativeRobot {
 	public static final boolean isCompBot = false;
 
 	DriveBase driveBase = new DriveBase();
-	DriveController driveControl = new DriveController(driveBase);
+	//DriveController driveControl = new DriveController(driveBase);
 	TeleopDrive teleopDrive = new TeleopDrive(driveBase);
 	
 	Intake intake = new Intake();
@@ -39,7 +39,8 @@ public class Robot extends IterativeRobot {
 
 	public void robotInit() {
 		NavX.reset();
-        while(NavX.isCalibrating()){
+		long initTime = System.currentTimeMillis();
+        while(NavX.isCalibrating() || System.currentTimeMillis() > initTime + 5000){
         	Timer.delay(0.05);
         }
 	}
@@ -47,26 +48,26 @@ public class Robot extends IterativeRobot {
 	public void disabled() {
 		Robot.gameState = RobotStates.DISABLED;
 	}
+//
+//	public void test() {
+//
+//	}
+//
+//	MultiLooper autoLooper = new MultiLooper("auto ", 200);
+//	boolean firstAuto = true;
+//	public void autonomousInit() {
+//		if(firstAuto){
+//			autoLooper.addLoopable(flyControl);
+//		}
+//	}
 
-	public void test() {
-
-	}
-
-	MultiLooper autoLooper = new MultiLooper("auto ", 200);
-	boolean firstAuto = true;
-	public void autonomousInit() {
-		if(firstAuto){
-			autoLooper.addLoopable(flyControl);
-		}
-	}
 
 
-
-	Auto auto = new Auto(driveControl, intake, flyControl, armControl);
+	//Auto auto = new Auto(driveControl, intake, flyControl, armControl);
 
 	public void autonomousPeriodic() {
 
-		
+		/**
 		if (isAutonomous() && isEnabled()) {
 			autoLooper.start();
 			Robot.gameState = RobotStates.AUTO;
@@ -85,7 +86,7 @@ public class Robot extends IterativeRobot {
 		}
 
 		Robot.gameState = RobotStates.DISABLED;
-		Timer.delay(0.02);
+		Timer.delay(0.02); **/
 	}
 
 	public void disabledPeriodic() {
