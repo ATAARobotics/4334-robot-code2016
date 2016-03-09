@@ -17,7 +17,7 @@ public class Intake {
 	
 	
 	public void setIntake(double pow) {
-		elToro.set(-pow);
+		elToro.set(pow);
 		intk.set(pow);
 	}
 
@@ -26,14 +26,14 @@ public class Intake {
 		if (ballReady()) {
 			System.out.println("ball is ready stopping ");
 			if (pow < 0) {
-				elToro.set(-pow);
+				elToro.set(pow);
 			} else {
 				elToro.set(0);
 			}
 
 		} else {
 			System.out.println("ball is not ready ");
-			elToro.set(-pow);
+			elToro.set(pow);
 		}
 		intk.set(pow);
 	}

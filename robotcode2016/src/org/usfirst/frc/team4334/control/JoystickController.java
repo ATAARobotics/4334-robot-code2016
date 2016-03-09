@@ -106,7 +106,7 @@ public class JoystickController implements Loopable {
 
 			if (opLeftT > 0.1 || opRightT > 0.1) {
 				toggled = false;
-				armControl.setPow(opLeftT - opRightT);
+				armControl.setPow(opRightT - opLeftT);
 			} else {
 				armControl.setPow(0);
 //				if (toggled) {
@@ -123,19 +123,19 @@ public class JoystickController implements Loopable {
 		// intake
 		if (driver.getRawButton(XboxMap.A.mappedVal())) {
 			if(Math.abs(flyControl.getError()) < 200){
-				intake.setIntake(1);
+				intake.setIntake(-1);
 			} else{
 				intake.setIntake(0);
 			}
 		} 
 		else if(driver.getRawButton(XboxMap.X.mappedVal())){
-			intake.setIntake(1);
+			intake.setIntake(-1);
 		}
 		else {
 			double y1 = Utils.deadzone(
 					operator.getRawAxis(XboxMap.SLY.mappedVal()),
 					JoyConstants.ARM_DEADZONE);
-			intake.setIntakTillStop(y1);
+			intake.setIntake(y1);
 		}
 
 	}
