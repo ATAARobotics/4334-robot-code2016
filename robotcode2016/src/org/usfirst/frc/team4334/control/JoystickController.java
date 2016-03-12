@@ -123,19 +123,19 @@ public class JoystickController implements Loopable {
 		// intake
 		if (driver.getRawButton(XboxMap.A.mappedVal())) {
 			if(Math.abs(flyControl.getError()) < 200){
-				intake.setIntake(-1);
+				intake.setIntake(1);
 			} else{
 				intake.setIntake(0);
 			}
 		} 
 		else if(driver.getRawButton(XboxMap.X.mappedVal())){
-			intake.setIntake(-1);
+			intake.setIntake(1);
 		}
 		else {
 			double y1 = Utils.deadzone(
 					operator.getRawAxis(XboxMap.SLY.mappedVal()),
 					JoyConstants.ARM_DEADZONE);
-			intake.setIntake(y1);
+			intake.setIntakTillStop(y1);
 		}
 
 	}

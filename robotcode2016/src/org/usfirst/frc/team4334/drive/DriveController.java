@@ -34,7 +34,7 @@ public class DriveController {
 	public void arcTurn(double radius, double orientation, boolean turnRight) {
 		double insideSet = (2 * Math.PI * radius) * (orientation / 360)
 				* DriveConstants.TICKS_PER_FEET;
-		double outsideSet = (2 * Math.PI * (radius + DriveConstants.DRIVE_WIDTH))
+		double outsideSet = (2 * Math.PI * (radius + (DriveConstants.DRIVE_WIDTH / 12)))
 				* (orientation / 360) * DriveConstants.TICKS_PER_FEET;
 		
 		double ratio = outsideSet / insideSet; //how much faster the left side needs to turn 
@@ -63,6 +63,7 @@ public class DriveController {
 						- (drive.getLeftEnc() - initLeft) * ratio;	
 			}
 			System.out.println("outside error "  + outsideError);
+			System.out.println("RATIO : " + ratio);
 			double driveOut = master.calculate(outsideError);
 			double slaveOut = slave.calculate(slaveError);
 			System.out.println("slave output " + slaveOut + " drive out " + driveOut);
@@ -76,9 +77,9 @@ public class DriveController {
 				slaveOut = DriveConstants.MAX_AUTO_SPEED * slaveOut
 						/ Math.abs(slaveOut);
 			}
-
+		
 			if(turnRight){
-				drive.setDrive(driveOut - slaveOut, (driveOut / ratio) + slaveOut);
+				drive.setDrive(driveOut + slaveOut, (driveOut / ratio) - slaveOut);
 			} else{
 				drive.setDrive((driveOut / ratio) - slaveOut, (driveOut) + slaveOut);
 			}
@@ -104,8 +105,16 @@ public class DriveController {
 		
 	}
 
-	public void driveFeet(double feet) {
-		System.out.println("drivine");
+	public void giveStraightDrivePow(double left, double right){
+		drive.setDrive(left, right);
+	}
+	
+	
+	public void driveFeet(double feet){
+		driveFeet(DriveConstants.MAX_AUTO_SPEED);
+	}
+	
+	public void driveFeet(double feet, double maxSpeed) {
 		double setPoint = feet * DriveConstants.TICKS_PER_FEET;
 		boolean atSetpoint = false;
 		long initTime = System.currentTimeMillis();
@@ -126,7 +135,6 @@ public class DriveController {
 
 			double angError = Utils.getAngleDifferenceDeg(initHeading,
 					NavX.getAngle());
-			System.out.println("calculated straight error is " + angError);
 
 			double angOut = navXStraight.calculate(angError);
 
@@ -139,29 +147,33 @@ public class DriveController {
 			SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 			SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 			SmartDashboard.putNumber("Err ", driveErr);
-			SmartDashboard.putNumber("navx Err", angError);
-			SmartDashboard.putNumber("navx out", angOut);
-			SmartDashboard.putNumber("driveOut", driveOut);
+//			SmartDashboard.putNumber("navx Err", angError);
+//			SmartDashboard.putNumber("navx out", angOut);
+//			SmartDashboard.putNumber("driveOut", driveOut);
 			SmartDashboard.putNumber("error sum", master.errorSum);
 
-			if (Math.abs(driveOut) > DriveConstants.MAX_AUTO_SPEED) {
-				driveOut = DriveConstants.MAX_AUTO_SPEED * driveOut
+			if (Math.abs(driveOut) > maxSpeed) {
+				driveOut = maxSpeed * driveOut
 						/ Math.abs(driveOut);
 			}
 
-			if (Math.abs(slaveOut) > DriveConstants.MAX_AUTO_SPEED) {
-				slaveOut = DriveConstants.MAX_AUTO_SPEED * slaveOut
+			if (Math.abs(slaveOut) > maxSpeed) {
+				slaveOut = maxSpeed * slaveOut
 						/ Math.abs(slaveOut);
 			}
 
-			drive.setDrive(driveOut - slaveOut + angOut, driveOut + slaveOut
-					- angOut);
-
+			slaveOut = 0;
+			drive.setDrive(driveOut - slaveOut + angOut, driveOut + slaveOut - angOut);
+	
+	
+		
 			if (!(Math.abs(driveErr) < errorThresh)) {
 				initTime = System.currentTimeMillis();
 			} else {
 				if (System.currentTimeMillis() - initTime > DriveConstants.SATISFY_TIME_MS) {
 					atSetpoint = true;
+
+					drive.setDrive(0, 0);
 					return;
 				}
 			}

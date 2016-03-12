@@ -20,7 +20,7 @@ public class Robot extends IterativeRobot {
 	public static final boolean isCompBot = false;
 
 	DriveBase driveBase = new DriveBase();
-	//DriveController driveControl = new DriveController(driveBase);
+	DriveController driveControl = new DriveController(driveBase);
 	TeleopDrive teleopDrive = new TeleopDrive(driveBase);
 	
 	Intake intake = new Intake();
@@ -41,6 +41,7 @@ public class Robot extends IterativeRobot {
 		NavX.reset();
 		long initTime = System.currentTimeMillis();
         while(NavX.isCalibrating() || System.currentTimeMillis() > initTime + 5000){
+        	System.out.println("calibrating");
         	Timer.delay(0.05);
         }
 	}
@@ -53,21 +54,21 @@ public class Robot extends IterativeRobot {
 //
 //	}
 //
-//	MultiLooper autoLooper = new MultiLooper("auto ", 200);
-//	boolean firstAuto = true;
-//	public void autonomousInit() {
-//		if(firstAuto){
-//			autoLooper.addLoopable(flyControl);
-//		}
-//	}
+	MultiLooper autoLooper = new MultiLooper("auto ", 200);
+	boolean firstAuto = true;
+	public void autonomousInit() {
+		if(firstAuto){
+			autoLooper.addLoopable(flyControl);
+		}
+	}
 
 
 
-	//Auto auto = new Auto(driveControl, intake, flyControl, armControl);
-
+	
+	Auto auto = new Auto(driveControl, intake, flyControl, armControl);
+	@SuppressWarnings({ "deprecation", "deprecation" })
 	public void autonomousPeriodic() {
 
-		/**
 		if (isAutonomous() && isEnabled()) {
 			autoLooper.start();
 			Robot.gameState = RobotStates.AUTO;
@@ -76,8 +77,8 @@ public class Robot extends IterativeRobot {
 			while (isAutonomous() && isEnabled()) {
 				if (isDisabled()) {
 					Robot.gameState = RobotStates.DISABLED;
+					autoThread.stop();
 				}
-				
 			}	
 			Robot.gameState = RobotStates.DISABLED;
 			autoLooper.stop();
@@ -86,7 +87,7 @@ public class Robot extends IterativeRobot {
 		}
 
 		Robot.gameState = RobotStates.DISABLED;
-		Timer.delay(0.02); **/
+		Timer.delay(0.02); 
 	}
 
 	public void disabledPeriodic() {
@@ -116,7 +117,7 @@ public class Robot extends IterativeRobot {
 		teleLooper.start();
 		while (isOperatorControl() && isEnabled()) {
 			SmartDashboard.putNumber("encoder L", driveBase.getLeftEnc());
-			SmartDashboard.putNumber("encoder R", driveBase.getLeftEnc());
+			SmartDashboard.putNumber("encoder R", driveBase.getRightEnc());
 			Timer.delay(0.02);
 		}
 		Robot.gameState = RobotStates.DISABLED;

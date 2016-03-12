@@ -33,6 +33,9 @@ public class FlywheelController implements Loopable {
 	public void setFlySpeedObj() {
 		setFlySpeed(FlyConstants.RPM_OBST, FlyConstants.POW_OBST);
 	}
+	
+
+	
 
 	public void setFlySpeed(double rpm) {
 		this.setPoint = rpm;
