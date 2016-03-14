@@ -21,6 +21,7 @@ public class Ports {
 	public static final int EL_TORRO_ULT = 3; //actual 3
 	public static final int EL_TORRO_ULT_2 = 2; //actual 2
 	public static final int ARM_POT = 0;
+	public static final int ARM_LIMIT_LOW = 8;
 
 	public static final int ENCODER_RIGHT = 4;
 	public static final int ENCODER_RIGHT_2 = 5;

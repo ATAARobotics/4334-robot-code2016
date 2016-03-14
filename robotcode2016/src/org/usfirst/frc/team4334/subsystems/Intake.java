@@ -2,6 +2,7 @@ package org.usfirst.frc.team4334.subsystems;
 
 import org.usfirst.frc.team4334.robot.Ports;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.Victor;
 
