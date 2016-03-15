@@ -3,9 +3,11 @@ package org.usfirst.frc.team4334.flywheel;
 import java.util.TimerTask;
 
 import org.usfirst.frc.team4334.control.Loopable;
+import org.usfirst.frc.team4334.robot.Ports;
 import org.usfirst.frc.team4334.utils.PidController;
 
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,6 +15,7 @@ public class FlywheelController implements Loopable {
 
 	PidController pid;
 	private Fly fly;
+
 	private double setPoint;
 	private double predPow;
 	private double error;
@@ -24,6 +27,7 @@ public class FlywheelController implements Loopable {
 		fly = f;
 		pid = new PidController(FlyConstants.kP, FlyConstants.kI,
 				FlyConstants.kD, FlyConstants.intLim, false);
+	
 	}
 
 	public void setFlySpeedBatter() {
@@ -33,9 +37,6 @@ public class FlywheelController implements Loopable {
 	public void setFlySpeedObj() {
 		setFlySpeed(FlyConstants.RPM_OBST, FlyConstants.POW_OBST);
 	}
-	
-
-	
 
 	public void setFlySpeed(double rpm) {
 		this.setPoint = rpm;
@@ -58,20 +59,35 @@ public class FlywheelController implements Loopable {
 	}
 
 	private boolean pid_enabled = true;
+	private boolean lastOn = false;
+	private long lastFlash = System.currentTimeMillis();
 
 	public void calculate() {
 		pid.sendValuesToDashboard("flywheel_val");
-		System.out.println(this.error);
 		this.error = getError();
 		double output = this.predPow + pid.calculate(this.error);
 		// System.out.println(output);
 		if (output < 0) {
 			output = 0;
 		}
+		if (error > 500) {
+			//light.set(Relay.Value.kReverse);
+		} else {
+			if (lastFlash + 100 < System.currentTimeMillis()) {
+				if (lastOn) {
+					//light.set(Relay.Value.kReverse);
+				} else {
+					//light.set(Relay.Value.kOn);
+				}
+				lastOn = !lastOn;
+				lastFlash = System.currentTimeMillis();
+			}
+		}
 		fly.setFlyPow(output);
 		SmartDashboard.putNumber("fly_error ", this.error);
 		SmartDashboard.putNumber("fly_out", output);
 		SmartDashboard.putNumber("set_rpm", this.setPoint);
+
 		try {
 			Thread.sleep(FlyConstants.THREAD_TIME);
 		} catch (InterruptedException e) {

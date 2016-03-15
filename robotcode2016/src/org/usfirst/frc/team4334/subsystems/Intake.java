@@ -5,6 +5,7 @@ import org.usfirst.frc.team4334.robot.Ports;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
 	private static Victor intk = new Victor(Ports.INTAKE);
@@ -23,9 +24,7 @@ public class Intake {
 	}
 
 	public void setIntakTillStop(double pow) {
-		System.out.println("checking if ball is ready ");
 		if (ballReady()) {
-			System.out.println("ball is ready stopping ");
 			if (pow < 0) {
 				elToro.set(pow);
 			} else {
@@ -33,7 +32,6 @@ public class Intake {
 			}
 
 		} else {
-			System.out.println("ball is not ready ");
 			elToro.set(pow);
 		}
 		intk.set(pow);
@@ -53,7 +51,6 @@ public class Intake {
 	}
 
 	public boolean ballReady() {
-		System.out.println("ult range " + ult.getRangeInches());
 		return (ult.getRangeInches() < IntakeArmConst.INTK_ULT_THRESH);
 	}
 

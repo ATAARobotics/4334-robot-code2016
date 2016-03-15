@@ -8,13 +8,28 @@ public class NavX {
 
     private static AHRS navx = new AHRS(SPI.Port.kMXP);
     
+    public static void resetDisplacement(){
+    	navx.resetDisplacement();
+    }
     
     public static double getAngle() {
         return navx.getAngle();   
     }
     
+    
+    public static double getDisplacementX(){
+    	return navx.getDisplacementX();
+    }
+    
+    public static double getDisplacementY(){
+    	return navx.getDisplacementY();
+    }
+    
+    public static double getDisplacementZ(){
+    	return navx.getDisplacementY();
+    }
+    
     public static boolean isCalibrating(){
-    	
     	return navx.isCalibrating();
     }
     

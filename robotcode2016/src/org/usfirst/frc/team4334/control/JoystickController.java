@@ -11,6 +11,7 @@ import org.usfirst.frc.team4334.subsystems.Intake;
 import org.usfirst.frc.team4334.utils.Utils;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JoystickController implements Loopable {
@@ -24,10 +25,15 @@ public class JoystickController implements Loopable {
 	private ArmController armControl;
 	private boolean ghettoShiftFlag = false;
 	private boolean driverPre = false;
+	
+	
+	Relay light = new Relay(Ports.LIGHT_RELAY);
+	boolean lightEnabled = true;
 
 	public JoystickController(Intake i, FlywheelController fly, DriveBase d,
 			ArmController armContrl) {
 		System.out.println("joystick constructor called");
+		light.set(Relay.Value.kForward);
 		intake = i;
 		flyControl = fly;
 		drive = d;
@@ -53,6 +59,8 @@ public class JoystickController implements Loopable {
 		}
 	};
 
+
+	long lastLightSwitch = System.currentTimeMillis();
 	@Override
 	public void update() {
 		SmartDashboard.putNumber("navx ", NavX.getAngle());
@@ -90,7 +98,21 @@ public class JoystickController implements Loopable {
 			flyControl.setFlySpeed(0, 0);
 		}
 
-		boolean toggled = true;
+		
+		
+		if(operator.getRawButton(XboxMap.Y.mappedVal())
+				&& lastLightSwitch + 500 < System.currentTimeMillis()){
+			lastLightSwitch = System.currentTimeMillis();
+			if(lightEnabled){
+				light.set(Relay.Value.kOff);
+				lightEnabled = false;
+			} else{
+				light.set(Relay.Value.kForward);
+				lightEnabled = true;
+			}
+		}
+		
+		boolean toggled = false;
 		if (operator.getRawButton(XboxMap.LB.mappedVal())) {
 			armControl.setUp();
 			toggled = true;

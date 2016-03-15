@@ -40,10 +40,7 @@ public class Fly {
 		
 		// ticks / ms
 		double currentTicks = hallEffect.get();
-		double rate;
-
-	
-		rate = (currentTicks - lastTicks) / changeInTime;
+		double rate = (currentTicks - lastTicks) / changeInTime;
 
 		if(rate <= 0){
 			return 0;
@@ -51,10 +48,10 @@ public class Fly {
 		lastTicks = currentTicks;
 		// convert to rotations / s
 		// add a filter 
-			// convert to rpm
+		// convert to rpm
+		
 		double preCalcRPM = (rate / FlyConstants.TICKS_PER_WHEEL_ROTATION) * 60 * 1000;
-		currentRpm = currentRpm * 0.6 + 0.4 *  preCalcRPM;
-
+		currentRpm = currentRpm * 0.7 + 0.3 *  preCalcRPM;
 		holderSpeed = currentRpm;
 		return currentRpm;
 	}

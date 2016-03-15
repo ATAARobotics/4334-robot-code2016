@@ -93,11 +93,6 @@ public class DriveController {
 				}
 			}
 
-			try {
-				Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
-			} catch (Exception e) {
-
-			}
 
 		}
 		drive.setDrive(0, 0);
@@ -114,7 +109,7 @@ public class DriveController {
 		driveFeet(DriveConstants.MAX_AUTO_SPEED);
 	}
 	
-	public void driveFeet(double feet, double maxSpeed) {
+	public void driveFeet(double feet, double maxSpeed) throws InterruptedException {
 		double setPoint = feet * DriveConstants.TICKS_PER_FEET;
 		boolean atSetpoint = false;
 		long initTime = System.currentTimeMillis();
@@ -178,11 +173,10 @@ public class DriveController {
 				}
 			}
 
-			try {
-				Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
-			} catch (Exception e) {
-
-			}
+		
+			Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
+		
+			
 
 		}
 		drive.setDrive(0, 0);
@@ -190,18 +184,20 @@ public class DriveController {
 	}
 
 	private boolean notDisabled() {
-		return Robot.gameState != Robot.RobotStates.DISABLED;
+		System.out.println("checking if disabled ");
+		System.out.println(Robot.gameState != Robot.RobotStates.AUTO);
+		return Robot.gameState != Robot.RobotStates.AUTO;
 	}
 
 	// need to change gyro to navx
 
-	public void turnDegreesRel(double degrees) {
+	public void turnDegreesRel(double degrees) throws InterruptedException {
 		// need to add navx here instead
 		System.out.println("setting target " + NavX.getAngle() + degrees);
 		turnDegreesAbsolute((NavX.getAngle() + degrees));
 	}
 
-	public void turnDegreesAbsolute(double degrees) {
+	public void turnDegreesAbsolute(double degrees) throws InterruptedException {
 		while (degrees > 360) {
 			degrees -= 360;
 		}
@@ -254,11 +250,9 @@ public class DriveController {
 				}
 			}
 
-			try {
-				Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
-			} catch (Exception e) {
-
-			}
+			
+			Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
+		
 
 		}
 		drive.setDrive(0, 0);

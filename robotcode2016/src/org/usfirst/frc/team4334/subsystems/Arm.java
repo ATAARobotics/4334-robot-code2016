@@ -10,25 +10,42 @@ public class Arm {
 	private static CANTalon motor = new CANTalon(Ports.ARM);
 	private static CANTalon motor2 = new CANTalon(Ports.ARM_2);
 	private static DigitalInput limitLow = new DigitalInput(Ports.ARM_LIMIT_LOW);
+	private static DigitalInput limitHigh = new DigitalInput(Ports.ARM_LIMIT_HIIGH);
 	//private static AnalogInput pot = new AnalogInput(Ports.ARM_POT);
+	
+	public void lowerArmTillSwitch(){
+		while(!limitLow.get()){
+			setArmPow(-1);
+		}
+	}
+	
+	public void raiseArmTIllSwitch(){
+		while(!limitLow.get()){
+			setArmPow(1);
+		}
+	}
+	
 	
 	public void setArmPow(double pow){
 	    
-	    if(!limitLow.get()) {
-
-	        if(Math.abs(pow) > IntakeArmConst.ARM_MAX_POW){
-	            pow = pow > 0 ? IntakeArmConst.ARM_MAX_POW : -IntakeArmConst.ARM_MAX_POW;
-	        }
+	    if(Math.abs(pow) > IntakeArmConst.ARM_MAX_POW){
+            pow = pow > 0 ? IntakeArmConst.ARM_MAX_POW : -IntakeArmConst.ARM_MAX_POW;
+        }
+	    
+	    if(!limitLow.get()) {	    
 	        if(pow < 0) {
 	            pow = 0;
 	        }
-	        motor2.set(-pow);
-	        motor.set(pow);
+	    } else if(!limitHigh.get()){
+	    	if(pow > 0){
+	    		pow = 0;
+	    	}
 	    }
 	    
 		if(Math.abs(pow) > IntakeArmConst.ARM_MAX_POW){
 			pow = pow > 0 ? IntakeArmConst.ARM_MAX_POW : -IntakeArmConst.ARM_MAX_POW;
 		}
+		
 		motor2.set(-pow);
 		motor.set(pow);
 	}

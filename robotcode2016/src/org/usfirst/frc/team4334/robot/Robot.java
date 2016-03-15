@@ -12,6 +12,8 @@ import org.usfirst.frc.team4334.subsystems.ArmController;
 import org.usfirst.frc.team4334.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,74 +24,76 @@ public class Robot extends IterativeRobot {
 	DriveBase driveBase = new DriveBase();
 	DriveController driveControl = new DriveController(driveBase);
 	TeleopDrive teleopDrive = new TeleopDrive(driveBase);
-	
+
 	Intake intake = new Intake();
 	Fly fly = new Fly();
 	ArmController armControl = new ArmController();
 	FlywheelController flyControl = new FlywheelController(fly);
 
-	JoystickController joyControl = new JoystickController(intake,
-			flyControl, driveBase, armControl);
+	JoystickController joyControl = new JoystickController(intake, flyControl,
+			driveBase, armControl);
 
 	public static RobotStates gameState = RobotStates.DISABLED;
-
+	public static AutoChooser autoChooser = new AutoChooser();
+	
 	public static enum RobotStates {
 		DISABLED, TELEOP, AUTO
 	}
 
 	public void robotInit() {
+
 		NavX.reset();
 		long initTime = System.currentTimeMillis();
-        while(NavX.isCalibrating() || System.currentTimeMillis() > initTime + 5000){
-        	System.out.println("calibrating");
-        	Timer.delay(0.05);
-        }
+		while (NavX.isCalibrating()
+				|| System.currentTimeMillis() > initTime + 5000) {
+			System.out.println("calibrating");
+			Timer.delay(0.05);
+		}
+		autoChooser.putChoosersOnDash();
 	}
 
-	public void disabled() {
-		Robot.gameState = RobotStates.DISABLED;
-	}
-//
-//	public void test() {
-//
-//	}
-//
 	MultiLooper autoLooper = new MultiLooper("auto ", 200);
 	boolean firstAuto = true;
+
 	public void autonomousInit() {
-		if(firstAuto){
+		gameState = RobotStates.AUTO;
+		if (firstAuto) {
 			autoLooper.addLoopable(flyControl);
 		}
 	}
 
-
-
-	
 	Auto auto = new Auto(driveControl, intake, flyControl, armControl);
-	@SuppressWarnings({ "deprecation", "deprecation" })
-	public void autonomousPeriodic() {
 
+	Thread autoThread = new Thread(auto);
+	public void autonomousPeriodic() {
 		if (isAutonomous() && isEnabled()) {
 			autoLooper.start();
 			Robot.gameState = RobotStates.AUTO;
-			Thread autoThread = new Thread(auto);
+			ranAuto = true;
 			autoThread.run();
+
 			while (isAutonomous() && isEnabled()) {
-				if (isDisabled()) {
-					Robot.gameState = RobotStates.DISABLED;
-					autoThread.stop();
-				}
-			}	
+				Timer.delay(0.02);
+			}
 			Robot.gameState = RobotStates.DISABLED;
 			autoLooper.stop();
 			Timer.delay(0.02);
-			autoThread.stop();
+			autoThread.interrupt();
+			ranAuto = false;
+			driveControl.giveStraightDrivePow(0, 0);
 		}
-
 		Robot.gameState = RobotStates.DISABLED;
-		Timer.delay(0.02); 
+		Timer.delay(0.02);
 	}
 
+	boolean ranAuto = false;
+	public void disabledInit(){
+		if(ranAuto){
+			autoThread.interrupt();
+			ranAuto = false;
+		}
+	}
+	
 	public void disabledPeriodic() {
 		Robot.gameState = RobotStates.DISABLED;
 		while (isDisabled()) {
@@ -99,25 +103,35 @@ public class Robot extends IterativeRobot {
 
 	MultiLooper teleLooper = new MultiLooper("tele looper", 0.02);
 	boolean firstRun = true;
+
 	public void teleopInit() {
 		System.out.println("adding loopables ");
 		if (firstRun) {
 			teleLooper.addLoopable(joyControl);
 			teleLooper.addLoopable(flyControl);
-		//	teleLooper.addLoopable(armControl);
-		
+			// teleLooper.addLoopable(armControl);
+
 			firstRun = false;
 		}
 		Robot.gameState = RobotStates.TELEOP;
 
 	}
 
+
+
 	public void teleopPeriodic() {
-		System.out.println("starting loopables");
 		teleLooper.start();
+		Robot.gameState = RobotStates.TELEOP;
 		while (isOperatorControl() && isEnabled()) {
+//			Relay light = new Relay(Ports.LIGHT_RELAY);
+//			light.set(Relay.Value.kOn);
+//			light.set(Relay.Value.kForward);
 			SmartDashboard.putNumber("encoder L", driveBase.getLeftEnc());
 			SmartDashboard.putNumber("encoder R", driveBase.getRightEnc());
+			SmartDashboard.putNumber("navx_X_disp" , NavX.getDisplacementX());
+			SmartDashboard.putNumber("navx_Y_disp" , NavX.getDisplacementY());
+			SmartDashboard.putNumber("navx_Z_disp" , NavX.getDisplacementZ());
+			
 			Timer.delay(0.02);
 		}
 		Robot.gameState = RobotStates.DISABLED;
