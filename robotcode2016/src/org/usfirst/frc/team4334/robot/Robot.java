@@ -46,39 +46,41 @@ public class Robot extends IterativeRobot {
 		long initTime = System.currentTimeMillis();
 		while (NavX.isCalibrating()
 				|| System.currentTimeMillis() > initTime + 5000) {
-			System.out.println("calibrating");
 			Timer.delay(0.05);
 		}
 		autoChooser.putChoosersOnDash();
 	}
 
-	MultiLooper autoLooper = new MultiLooper("auto ", 200);
+	MultiLooper autoLooper = new MultiLooper("auto ", 0.02);
 	boolean firstAuto = true;
 
 	public void autonomousInit() {
 		gameState = RobotStates.AUTO;
 		if (firstAuto) {
 			autoLooper.addLoopable(flyControl);
+			firstAuto = false;
 		}
 	}
 
 	Auto auto = new Auto(driveControl, intake, flyControl, armControl);
 
-	Thread autoThread = new Thread(auto);
+
+	Thread autoThread;
 	public void autonomousPeriodic() {
 		if (isAutonomous() && isEnabled()) {
 			autoLooper.start();
+
 			Robot.gameState = RobotStates.AUTO;
 			ranAuto = true;
-			autoThread.run();
 
+			autoThread = new Thread(auto);
+			autoThread.start();
+			
 			while (isAutonomous() && isEnabled()) {
 				Timer.delay(0.02);
 			}
-			Robot.gameState = RobotStates.DISABLED;
 			autoLooper.stop();
-			Timer.delay(0.02);
-			autoThread.interrupt();
+			autoThread.stop();
 			ranAuto = false;
 			driveControl.giveStraightDrivePow(0, 0);
 		}

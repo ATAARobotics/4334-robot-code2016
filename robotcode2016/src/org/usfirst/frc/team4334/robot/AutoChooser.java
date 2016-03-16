@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutoChooser {
 
 	public static enum AutoMode {
-		LOW_BAR_1_BALL, FORWARD_CROSS, CHEVAL, PORTICUL;
+		LOW_BAR_1_BALL, FORWARD_CROSS, CROSS_1_BALL, CHEVAL, PORTICUL;
 	}
 
 	public static enum Position {
@@ -25,8 +25,10 @@ public class AutoChooser {
 		chooser = new SendableChooser();
 		chooser.addDefault("LOW_BAR_ONE_BALL", AutoMode.LOW_BAR_1_BALL);
 		chooser.addDefault("DRIVE_FORWARD", AutoMode.FORWARD_CROSS);
-		chooser.addDefault("CHEVAL", AutoMode.CHEVAL);
-		chooser.addDefault("PORTI", AutoMode.PORTICUL);
+		chooser.addDefault("DRIVE_FORWARD_1_BALL", AutoMode.CROSS_1_BALL);
+		chooser.addDefault("CHEVAL (NOT IMPLEM)", AutoMode.CHEVAL);
+		chooser.addDefault("PORTI (NOT IMPLEM)", AutoMode.PORTICUL);
+		chooser.addDefault("DO NOTHING ", AutoMode.PORTICUL);
 
 		
 		

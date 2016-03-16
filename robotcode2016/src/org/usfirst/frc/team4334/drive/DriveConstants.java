@@ -31,7 +31,7 @@ public class DriveConstants {
 	public static final double DRIVE_KP = 0.0150;
 	public static final double DRIVE_KI = 0.005;
 	public static final double DRIVE_KD = 0.400;
-	public static final double DRIVE_INT_LIM = 0.10 / DRIVE_KI;
+	public static final double DRIVE_INT_LIM = 0.15 / DRIVE_KI;
 	
 	public static final double DRIVE_SLAVE_KP = 0.005;
 	public static final double DRIVE_SLAVE_KI = 0;

@@ -184,9 +184,10 @@ public class DriveController {
 	}
 
 	private boolean notDisabled() {
-		System.out.println("checking if disabled ");
-		System.out.println(Robot.gameState != Robot.RobotStates.AUTO);
-		return Robot.gameState != Robot.RobotStates.AUTO;
+		//System.out.println("checking if disabled " + System.currentTimeMillis());
+		//System.out.println(Robot.gameState != Robot.RobotStates.AUTO);
+		//System.out.println(Robot.gameState);
+		return Robot.gameState == Robot.RobotStates.AUTO;
 	}
 
 	// need to change gyro to navx

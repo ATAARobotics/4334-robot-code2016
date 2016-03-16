@@ -14,15 +14,17 @@ public class Arm {
 	//private static AnalogInput pot = new AnalogInput(Ports.ARM_POT);
 	
 	public void lowerArmTillSwitch(){
-		while(!limitLow.get()){
+		while(limitLow.get()){
 			setArmPow(-1);
 		}
+		setArmPow(0);
 	}
 	
 	public void raiseArmTIllSwitch(){
-		while(!limitLow.get()){
+		while(limitHigh.get()){
 			setArmPow(1);
 		}
+		setArmPow(0);
 	}
 	
 	
