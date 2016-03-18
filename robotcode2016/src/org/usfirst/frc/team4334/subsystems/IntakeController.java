@@ -29,16 +29,13 @@ public class IntakeController implements Loopable{
 		if(intake.ballReady()){
 			ballCount++;
 			//intake the next stage for a constant time
-			intake.driveIn();
+			intake.setIntake(1);
 			waiting = true;
 			initTime = System.currentTimeMillis();
 			return;
-		
 		}
 		if(ballCount >= 1){
 			intake.stop();
 		}
 	}
-	
-	
 }

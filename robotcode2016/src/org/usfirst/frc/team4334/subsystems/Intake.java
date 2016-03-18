@@ -13,45 +13,50 @@ public class Intake {
 	private static Ultrasonic ult = new Ultrasonic(Ports.EL_TORRO_ULT,
 			Ports.EL_TORRO_ULT_2);
 
-	public Intake(){
+	public Intake() {
 		ult.setAutomaticMode(true);
 	}
-	
-	
+
 	public void setIntake(double pow) {
-		elToro.set(pow);
+		elToro.set(-pow);
 		intk.set(pow);
 	}
 
 	public void setIntakTillStop(double pow) {
 		if (ballReady()) {
 			if (pow < 0) {
-				elToro.set(pow);
+				elToro.set(-pow);
 			} else {
 				elToro.set(0);
 			}
-
 		} else {
-			elToro.set(pow);
+			elToro.set(-pow);
 		}
 		intk.set(pow);
 	}
 
-	public void driveIn() {
-		elToro.set(-1);
-		intk.set(1);
+	public void intakeTillShoot() {
+		setIntake(1);
+		try {
+			while (ballReady()) {
+				setIntake(1);
+				Thread.sleep(20);
+			}
+			Thread.sleep(500);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		setIntake(0);
 	}
 
-	public void driveOut() {
-		intk.set(1);
-	}
+
 
 	public void stop() {
+		elToro.set(0);
 		intk.set(0);
 	}
 
 	public boolean ballReady() {
 		return (ult.getRangeInches() < IntakeArmConst.INTK_ULT_THRESH);
 	}
-
 }

@@ -41,14 +41,13 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void robotInit() {
-
+		autoChooser.putChoosersOnDash();
 		NavX.reset();
 		long initTime = System.currentTimeMillis();
 		while (NavX.isCalibrating()
 				|| System.currentTimeMillis() > initTime + 5000) {
 			Timer.delay(0.05);
 		}
-		autoChooser.putChoosersOnDash();
 	}
 
 	MultiLooper autoLooper = new MultiLooper("auto ", 0.02);
@@ -64,6 +63,9 @@ public class Robot extends IterativeRobot {
 
 	Auto auto = new Auto(driveControl, intake, flyControl, armControl);
 
+
+
+	boolean ranAuto = false;
 
 	Thread autoThread;
 	public void autonomousPeriodic() {
@@ -88,10 +90,9 @@ public class Robot extends IterativeRobot {
 		Timer.delay(0.02);
 	}
 
-	boolean ranAuto = false;
 	public void disabledInit(){
 		if(ranAuto){
-			autoThread.interrupt();
+			autoThread.stop();
 			ranAuto = false;
 		}
 	}
@@ -120,20 +121,15 @@ public class Robot extends IterativeRobot {
 	}
 
 
-
 	public void teleopPeriodic() {
 		teleLooper.start();
 		Robot.gameState = RobotStates.TELEOP;
 		while (isOperatorControl() && isEnabled()) {
-//			Relay light = new Relay(Ports.LIGHT_RELAY);
-//			light.set(Relay.Value.kOn);
-//			light.set(Relay.Value.kForward);
 			SmartDashboard.putNumber("encoder L", driveBase.getLeftEnc());
 			SmartDashboard.putNumber("encoder R", driveBase.getRightEnc());
 			SmartDashboard.putNumber("navx_X_disp" , NavX.getDisplacementX());
 			SmartDashboard.putNumber("navx_Y_disp" , NavX.getDisplacementY());
 			SmartDashboard.putNumber("navx_Z_disp" , NavX.getDisplacementZ());
-			
 			Timer.delay(0.02);
 		}
 		Robot.gameState = RobotStates.DISABLED;

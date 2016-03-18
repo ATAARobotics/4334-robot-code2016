@@ -95,16 +95,17 @@ public class DriveController {
 
 
 		}
-		drive.setDrive(0, 0);
-
-		
+		stopDrive();
 	}
 
 	public void giveStraightDrivePow(double left, double right){
 		drive.setDrive(left, right);
 	}
 	
-	
+	public void stopDrive(){
+		drive.setDrive(0,0);
+	}	
+
 	public void driveFeet(double feet){
 		driveFeet(DriveConstants.MAX_AUTO_SPEED);
 	}
@@ -125,8 +126,8 @@ public class DriveController {
 		int initLeft = drive.getLeftEnc();
 		int initRight = drive.getRightEnc();
 		while (!atSetpoint && notDisabled()) {
-			master.sendValuesToDashboard("master ");
-			slave.sendValuesToDashboard("slave ");
+			master.sendValuesToDashboard("drive_master_");
+			navXStraight.sendValuesToDashboard("drive_slave_");
 
 			double angError = Utils.getAngleDifferenceDeg(initHeading,
 					NavX.getAngle());
@@ -139,13 +140,13 @@ public class DriveController {
 			double driveOut = master.calculate(driveErr);
 			double slaveOut = 0;// slave.calculate(slaveErr);
 
-			SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
-			SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
-			SmartDashboard.putNumber("Err ", driveErr);
+		//	SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
+		//	SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
+		//	SmartDashboard.putNumber("Err ", driveErr);
 //			SmartDashboard.putNumber("navx Err", angError);
 //			SmartDashboard.putNumber("navx out", angOut);
 //			SmartDashboard.putNumber("driveOut", driveOut);
-			SmartDashboard.putNumber("error sum", master.errorSum);
+//			SmartDashboard.putNumber("error sum", master.errorSum);
 
 			if (Math.abs(driveOut) > maxSpeed) {
 				driveOut = maxSpeed * driveOut
@@ -157,7 +158,6 @@ public class DriveController {
 						/ Math.abs(slaveOut);
 			}
 
-			slaveOut = 0;
 			drive.setDrive(driveOut - slaveOut + angOut, driveOut + slaveOut - angOut);
 	
 	
@@ -179,8 +179,7 @@ public class DriveController {
 			
 
 		}
-		drive.setDrive(0, 0);
-
+		stopDrive();
 	}
 
 	private boolean notDisabled() {
@@ -190,14 +189,15 @@ public class DriveController {
 		return Robot.gameState == Robot.RobotStates.AUTO;
 	}
 
-	// need to change gyro to navx
-
+	//turns the robot by the amount specified using the current navx angle
 	public void turnDegreesRel(double degrees) throws InterruptedException {
 		// need to add navx here instead
-		System.out.println("setting target " + NavX.getAngle() + degrees);
+		// System.out.println("setting target " + NavX.getAngle() + degrees);
 		turnDegreesAbsolute((NavX.getAngle() + degrees));
 	}
 
+
+	//turns the robot to the given angle according to the reading of the navx
 	public void turnDegreesAbsolute(double degrees) throws InterruptedException {
 		while (degrees > 360) {
 			degrees -= 360;
@@ -218,13 +218,13 @@ public class DriveController {
 		int initLeft = drive.getLeftEnc();
 		int initRight = drive.getRightEnc();
 
-		System.out.println(NavX.getAngle());
+//		System.out.println(NavX.getAngle());
 		while (!atSetpoint && notDisabled()) {
 			turnPid.sendValuesToDashboard("turn");
 			double driveErr = Utils.getAngleDifferenceDeg(setPoint,
 					NavX.getAngle());
-			System.out.println(degrees + " turn err " + driveErr + "   set "
-					+ setPoint + " actual " + NavX.getAngle());
+//			System.out.println(degrees + " turn err " + driveErr + "   set "
+//					+ setPoint + " actual " + NavX.getAngle());
 			double slaveErr = (drive.getLeftEnc() - initLeft)
 					+ (drive.getRightEnc() - initRight);
 			double driveOut = turnPid.calculate(driveErr);
@@ -250,11 +250,7 @@ public class DriveController {
 					return;
 				}
 			}
-
-			
-			Thread.sleep(DriveConstants.THREAD_SLEEP_MS);
-		
-
+			Thread.sleep(DriveConstants.THREAD_SLEEP_MS);		
 		}
 		drive.setDrive(0, 0);
 	}
@@ -263,9 +259,4 @@ public class DriveController {
 		SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 		SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 	}
-
-	public void calc() {
-
-	}
-
 }

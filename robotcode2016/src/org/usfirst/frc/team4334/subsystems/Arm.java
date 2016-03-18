@@ -13,19 +13,57 @@ public class Arm {
 	private static DigitalInput limitHigh = new DigitalInput(Ports.ARM_LIMIT_HIIGH);
 	//private static AnalogInput pot = new AnalogInput(Ports.ARM_POT);
 	
-	public void lowerArmTillSwitch(){
-		while(limitLow.get()){
+	public void lowerArmTillSwitch() throws InterruptedException{
+		long timLim = 4000;
+		long initTime = System.currentTimeMillis();
+		while(limitLow.get() && initTime + timLim > System.currentTimeMillis()){
 			setArmPow(-1);
+			Thread.sleep(20);
 		}
 		setArmPow(0);
 	}
 	
-	public void raiseArmTIllSwitch(){
-		while(limitHigh.get()){
+	public static long ARM_TIME_CONST = 4000;
+	public void raiseArmTIllSwitch() throws InterruptedException{
+		long timLim = 4000;
+		long initTime = System.currentTimeMillis();
+		while(limitHigh.get() && initTime + timLim > System.currentTimeMillis()){
 			setArmPow(1);
+			Thread.sleep(20);
 		}
 		setArmPow(0);
 	}
+	
+	public void lowerArmASynch(){
+		Thread thread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					lowerArmTillSwitch();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
+	}
+	
+	public void raiseArmASynch(){
+		Thread thread = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try {
+					raiseArmTIllSwitch();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
+	}
+	
+	
 	
 	
 	public void setArmPow(double pow){

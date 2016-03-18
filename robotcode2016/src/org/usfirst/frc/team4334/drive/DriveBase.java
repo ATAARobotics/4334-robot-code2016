@@ -57,7 +57,7 @@ public class DriveBase {
 	}
 
 	public int getRightEnc() {
-		return -rightEnc.get();
+		return rightEnc.get();
 	}
 
 	public int getLeftEnc() {
