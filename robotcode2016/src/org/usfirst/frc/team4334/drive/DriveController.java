@@ -228,7 +228,7 @@ public class DriveController {
 			double slaveErr = (drive.getLeftEnc() - initLeft)
 					+ (drive.getRightEnc() - initRight);
 			double driveOut = turnPid.calculate(driveErr);
-			double slaveOut = slave.calculate(slaveErr);
+			double slaveOut = 0;//slave.calculate(slaveErr);
 
 			if (Math.abs(driveOut) > DriveConstants.MAX_AUTO_TURN_SPEED) {
 				driveOut = DriveConstants.MAX_AUTO_TURN_SPEED * driveOut
@@ -240,7 +240,7 @@ public class DriveController {
 						/ Math.abs(slaveOut);
 			}
 
-			slaveOut = 0;
+		
 			drive.setDrive(driveOut - slaveOut, -(driveOut + slaveOut));
 
 			if (!(Math.abs(driveErr) < errorThresh)) {

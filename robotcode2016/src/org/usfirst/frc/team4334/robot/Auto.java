@@ -233,7 +233,7 @@ public class Auto implements Runnable {
 			drive.turnDegreesAbsolute(initAngle + 20);
 			drive.driveFeet(9.1, 0.99);
 			drive.turnDegreesAbsolute(initAngle + 60);
-			drive.driveFeet(0.8, 0.99);
+			drive.driveFeet(4.5, 0.99);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			fly.setFlySpeed(0, 0);

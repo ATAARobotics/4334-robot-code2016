@@ -42,7 +42,7 @@ public class Intake {
 				setIntake(1);
 				Thread.sleep(20);
 			}
-			Thread.sleep(500);
+			Thread.sleep(300);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -59,4 +59,5 @@ public class Intake {
 	public boolean ballReady() {
 		return (ult.getRangeInches() < IntakeArmConst.INTK_ULT_THRESH);
 	}
+
 }
