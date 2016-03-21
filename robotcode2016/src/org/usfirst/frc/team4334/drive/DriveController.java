@@ -110,7 +110,11 @@ public class DriveController {
 		driveFeet(DriveConstants.MAX_AUTO_SPEED);
 	}
 	
-	public void driveFeet(double feet, double maxSpeed) throws InterruptedException {
+	public void driveFeet(double feet, double maxSpeed) throws InterruptedException{
+	    driveFeet(feet,maxSpeed,99999);
+	}
+	
+	public void driveFeet(double feet, double maxSpeed, int expiryMS) throws InterruptedException {
 		double setPoint = feet * DriveConstants.TICKS_PER_FEET;
 		boolean atSetpoint = false;
 		long initTime = System.currentTimeMillis();
@@ -121,6 +125,7 @@ public class DriveController {
 		slave.reset();
 		navXStraight.reset();
 
+		long killTime = System.currentTimeMillis() + expiryMS;
 		double initHeading = NavX.getAngle();
 
 		int initLeft = drive.getLeftEnc();
@@ -143,9 +148,9 @@ public class DriveController {
 		//	SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 		//	SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
 		//	SmartDashboard.putNumber("Err ", driveErr);
-//			SmartDashboard.putNumber("navx Err", angError);
-//			SmartDashboard.putNumber("navx out", angOut);
-//			SmartDashboard.putNumber("driveOut", driveOut);
+			SmartDashboard.putNumber("navx Err", angError);
+			SmartDashboard.putNumber("navx out", angOut);
+			SmartDashboard.putNumber("driveOut", driveOut);
 //			SmartDashboard.putNumber("error sum", master.errorSum);
 
 			if (Math.abs(driveOut) > maxSpeed) {
@@ -156,12 +161,16 @@ public class DriveController {
 			if (Math.abs(slaveOut) > maxSpeed) {
 				slaveOut = maxSpeed * slaveOut
 						/ Math.abs(slaveOut);
-			}
+			} 
 
 			drive.setDrive(driveOut - slaveOut + angOut, driveOut + slaveOut - angOut);
 	
 	
-		
+			if(System.currentTimeMillis() > killTime){
+		         atSetpoint = true;
+                 drive.setDrive(0, 0);
+                 return;
+			}
 			if (!(Math.abs(driveErr) < errorThresh)) {
 				initTime = System.currentTimeMillis();
 			} else {

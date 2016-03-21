@@ -77,9 +77,7 @@ public class Auto implements Runnable {
 			intake.setIntake(-1);
 			drive.driveFeet(15, 0.99);
 			intake.setIntakTillStop(1);
-			drive.driveFeet(-10, 0.99);
-			arm.lowerArmASynch();
-			drive.driveFeet(-2.5, 0.4);
+			drive.driveFeet(-13, 0.99);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -224,16 +222,19 @@ public class Auto implements Runnable {
 	public void lowBar1Ball() {
 		try {
 			double initAngle = NavX.getAngle();
+            fly.setFlySpeedAuto();
 			arm.lowerArmASynch();
 			drive.driveFeet(2, 0.7);
 			arm.lowerArmTillSwitch();
 			System.out.println("hit auto");
-			drive.driveFeet(9, 0.7);
-			fly.setFlySpeedBatter();
+			//prev 9 
+			drive.driveFeet(9, 0.75);
 			drive.turnDegreesAbsolute(initAngle + 20);
+			//prev 9.1
 			drive.driveFeet(9.1, 0.99);
-			drive.turnDegreesAbsolute(initAngle + 60);
-			drive.driveFeet(4.5, 0.99);
+			//new is 43.5
+			drive.turnDegreesAbsolute(initAngle + 58.5);
+			drive.driveFeet(3.3, 0.5,3000);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			fly.setFlySpeed(0, 0);

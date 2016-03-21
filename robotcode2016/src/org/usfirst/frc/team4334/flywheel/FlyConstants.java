@@ -9,17 +9,20 @@ public class FlyConstants {
 	//error threshold for flywheel rpm
 	 static double ERROR_THRESH = 200;
 	 static double kP = 0.001;
-	 static double kI = 0.00005;
+	 static double kI = 0.00002;
 	 static double kD = 0;
-	 static double intLim = 0.30 / kI;	
+	 static double intLim = 0.40 / kI;	
 	
 	
 	//RPMS
 	 static double RPM_ON_BATTER = 6400;
 	 static double POW_ON_BATTER = 0.5;
 	
-	 static double RPM_OBST = 8200;
+	 static double RPM_OBST = 8500;
 	 static double POW_OBST = 0.7;
+	 
+	 public static double AUTO_RPM = 8500;
+	 public static double AUTO_POW = 0.7;
  
 	 public static double RPM_AUTO_LOWBAR = 8000;
 	 public static double POW_AUTO_LOWBAR = 0.9;

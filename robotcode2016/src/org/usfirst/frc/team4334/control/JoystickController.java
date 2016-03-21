@@ -82,11 +82,9 @@ public class JoystickController implements Loopable {
 			driverPre = false;
 		}
 
-		if (ghettoShiftFlag) {
-			teleDrive.teleopDrive(driver, 0.5);
-		} else {
-			teleDrive.teleopDrive(driver);
-		}
+	
+		teleDrive.teleopDrive(driver);
+		
 
 		// flywheel
 		// Spin-up(x for obstacle, a for batter)
