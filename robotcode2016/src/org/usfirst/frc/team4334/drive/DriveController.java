@@ -264,6 +264,49 @@ public class DriveController {
 		drive.setDrive(0, 0);
 	}
 
+	PidController MPF = new PidController(0.1, 0, 0, 0, true);
+	double MAX_ACCEL = 1;
+	double MAX_VEL = 3;
+	double kV = 0;
+	double kA = 0;
+	public void driveInchesMPF(double feet){
+		try{
+		double dT = 0.02; //repeat at 20 ms 
+		double t_acc = MAX_VEL / MAX_ACCEL, t_dec = t_acc; 
+		double t_max = (feet / MAX_VEL) - t_acc/2 - t_dec / 2;
+		//start 0 - t_acc 
+		double targetVel = 0;
+		double targetAcc = 0;
+
+		//stage 1: accel at full
+		double accCycles = t_acc * 1000 / 20.0;
+		targetAcc = MAX_ACCEL;
+		for(int i = 0; i<accCycles; i++){
+			targetVel += (MAX_ACCEL) * dT;
+			Thread.sleep((long) dT * 1000);
+		}
+		//stage 2: no accel, max velocity
+		targetVel = MAX_VEL;
+		targetAcc = 0;
+		double maxCycles = t_max * 1000 / 20.0;
+		for(int i = 0; i<maxCycles; i++){
+			Thread.sleep((long) dT * 1000);
+		}
+
+		//stage 3 negative accel
+		targetAcc = -MAX_ACCEL;
+		double decCycles = t_max * 1000 / 20.0;
+		for(int i = 0; i<decCycles; i++){
+			targetVel -= MAX_ACCEL;
+			Thread.sleep((long) dT * 1000);
+		}
+		
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void printEncoders() {
 		SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 		SmartDashboard.putNumber("RIGHT", drive.getRightEnc());

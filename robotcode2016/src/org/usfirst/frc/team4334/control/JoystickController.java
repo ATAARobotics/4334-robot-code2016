@@ -148,7 +148,7 @@ public class JoystickController implements Loopable {
 				intake.setIntake(0);
 			}
 		} 
-		else if(driver.getRawButton(XboxMap.X.mappedVal())){
+		else if(driver.getRawAxis(XboxMap.TR.mappedVal()) > 0.6){
 			intake.setIntake(1);
 		}
 		else {
