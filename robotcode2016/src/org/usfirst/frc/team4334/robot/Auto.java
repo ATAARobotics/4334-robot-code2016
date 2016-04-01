@@ -40,8 +40,23 @@ public class Auto implements Runnable {
 				|| mode == AutoChooser.AutoMode.LOW_BAR_1_BALL) {
 			lowBar1Ball();
 		} else if (mode == AutoChooser.AutoMode.CHEVAL) {
-			// crossChav();
-		} else if (mode == AutoChooser.AutoMode.FORWARD_CROSS) {
+			try {
+				crossCheval();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (mode == AutoChooser.AutoMode.PORTICUL){
+			try {
+				System.out.println("running test");
+				//crossPort(0);
+				test();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if (mode == AutoChooser.AutoMode.FORWARD_CROSS) {
 			if (pos == AutoChooser.Position.SECOND) {
 				genericCross();
 			} else if (pos == AutoChooser.Position.THIRD) {
@@ -71,6 +86,18 @@ public class Auto implements Runnable {
 		// TODO Auto-generated method stub
 
 	}
+	
+	
+	public void crossCheval() throws InterruptedException{
+		try{
+		drive.driveFeet(-4.35, 0.7);
+		arm.lowerArmTillSwitch();
+		drive.driveFeet(-10, 0.99);
+		} catch(Exception e){
+			
+		}
+		//drive.driveFeet(-5,0.99);
+	}
 
 	public void genericCross() {
 		try {
@@ -85,6 +112,25 @@ public class Auto implements Runnable {
 		}
 	}
 
+	public void crossPort(int pos) throws InterruptedException{
+		arm.lowerArmTillSwitch();
+		drive.driveFeet(-13,0.7);
+		
+	}
+	
+	public void test() throws InterruptedException{
+		drive.turnDegreesAbsolute(180);
+		drive.turnDegreesAbsolute(0);
+		drive.turnDegreesAbsolute(180);
+		drive.turnDegreesAbsolute(360);
+		drive.turnDegreesAbsolute(45);
+		drive.turnDegreesAbsolute(10);
+//		drive.driveFeet(-5,0.99);
+//		drive.driveFeet(5,0.99);
+//		drive.driveFeet(-5,0.99);
+	}
+	
+	
 	//4 ft 2 in 
 	public void crossAndShoot(int pos) {
 		double initY = 0;
@@ -133,17 +179,6 @@ public class Auto implements Runnable {
 		}
 	}
 
-	public void crossChav() {
-		double initAngle = NavX.getAngle();
-		try {
-			drive.driveFeet(-4, 0.8);
-			System.out.println("lowering arm");
-			arm.lowerArmTillSwitch();
-			drive.driveFeet(-4, 0.8);
-		} catch (Exception e) {
-
-		}
-	}
 
 	public void fourthPosition() {
 		try {
@@ -224,17 +259,14 @@ public class Auto implements Runnable {
 			double initAngle = NavX.getAngle();
             fly.setFlySpeedAuto();
 			arm.lowerArmASynch();
-			drive.driveFeet(2, 0.7);
-			arm.lowerArmTillSwitch();
+
 			System.out.println("hit auto");
 			//prev 9 
-			drive.driveFeet(9, 0.75);
-			drive.turnDegreesAbsolute(initAngle + 20);
-			//prev 9.1
-			drive.driveFeet(9.1, 0.99);
-			//new is 43.5
+			drive.driveFeet(19.6, 0.75);
+			arm.raiseArmASynch();
 			drive.turnDegreesAbsolute(initAngle + 58.5);
-			drive.driveFeet(3.3, 0.5,3000);
+			arm.lowerArmASynch();
+			drive.driveFeet(8.4, 0.7);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			fly.setFlySpeed(0, 0);

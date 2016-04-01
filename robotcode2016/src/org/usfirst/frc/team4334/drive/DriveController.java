@@ -114,6 +114,17 @@ public class DriveController {
 	    driveFeet(feet,maxSpeed,99999);
 	}
 	
+	public boolean driveAtRest(){
+		
+		double vel = drive.leftEnc.getRate() * DriveConstants.TICKS_PER_FEET;
+		if(Math.abs(vel) < DriveConstants.AUTO_REST_THRESH){
+		return true;
+		}
+		return false;
+	}
+	
+	
+	
 	public void driveFeet(double feet, double maxSpeed, int expiryMS) throws InterruptedException {
 		double setPoint = feet * DriveConstants.TICKS_PER_FEET;
 		boolean atSetpoint = false;
@@ -125,15 +136,18 @@ public class DriveController {
 		slave.reset();
 		navXStraight.reset();
 
+		double slewRate = 0.0005;
+		
 		long killTime = System.currentTimeMillis() + expiryMS;
 		double initHeading = NavX.getAngle();
 
+		double lastVal = 0;
 		int initLeft = drive.getLeftEnc();
 		int initRight = drive.getRightEnc();
 		while (!atSetpoint && notDisabled()) {
 			master.sendValuesToDashboard("drive_master_");
 			navXStraight.sendValuesToDashboard("drive_slave_");
-
+			
 			double angError = Utils.getAngleDifferenceDeg(initHeading,
 					NavX.getAngle());
 
@@ -147,7 +161,8 @@ public class DriveController {
 
 		//	SmartDashboard.putNumber("LEFT", drive.getLeftEnc());
 		//	SmartDashboard.putNumber("RIGHT", drive.getRightEnc());
-		//	SmartDashboard.putNumber("Err ", driveErr);
+			SmartDashboard.putNumber("drivevel ",  drive.leftEnc.getRate() * DriveConstants.TICKS_PER_FEET);
+			SmartDashboard.putNumber("Err ", driveErr);
 			SmartDashboard.putNumber("navx Err", angError);
 			SmartDashboard.putNumber("navx out", angOut);
 			SmartDashboard.putNumber("driveOut", driveOut);
@@ -163,8 +178,12 @@ public class DriveController {
 						/ Math.abs(slaveOut);
 			} 
 
+			if(Math.abs(driveOut - lastVal)> slewRate){
+				driveOut += slewRate * (driveOut - lastVal) / 
+						Math.abs(driveOut - lastVal);
+			}
 			drive.setDrive(driveOut - slaveOut + angOut, driveOut + slaveOut - angOut);
-	
+			lastVal = driveOut;
 	
 			if(System.currentTimeMillis() > killTime){
 		         atSetpoint = true;
@@ -173,7 +192,13 @@ public class DriveController {
 			}
 			if (!(Math.abs(driveErr) < errorThresh)) {
 				initTime = System.currentTimeMillis();
+		
 			} else {
+				if(driveAtRest()){
+					atSetpoint = true;
+					drive.setDrive(0, 0);
+					return;
+				}
 				if (System.currentTimeMillis() - initTime > DriveConstants.SATISFY_TIME_MS) {
 					atSetpoint = true;
 

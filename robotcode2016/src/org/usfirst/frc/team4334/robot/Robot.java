@@ -11,9 +11,8 @@ import org.usfirst.frc.team4334.sensors.NavX;
 import org.usfirst.frc.team4334.subsystems.ArmController;
 import org.usfirst.frc.team4334.subsystems.Intake;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -41,6 +40,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void robotInit() {
+		CameraServer server = CameraServer.getInstance();
+		server.setQuality(50);
+		server.startAutomaticCapture("cam0");
+		
 		autoChooser.putChoosersOnDash();
 		NavX.reset();
 		long initTime = System.currentTimeMillis();

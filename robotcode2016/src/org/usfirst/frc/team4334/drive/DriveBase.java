@@ -16,7 +16,7 @@ public class DriveBase {
 	private LinkedList<SpeedController> rightMotors;
 	private LinkedList<SpeedController> leftMotors;
 
-	private static Encoder leftEnc = new Encoder(Ports.ENCODER_LEFT,
+	public static Encoder leftEnc = new Encoder(Ports.ENCODER_LEFT,
 			Ports.ENCODER_LEFT_2, true, EncodingType.k4X);
 //
 //	private static Encoder rightEnc = new Encoder(Ports.ENCODER_RIGHT,
@@ -64,7 +64,7 @@ public class DriveBase {
 	}
 
 	public int getLeftEnc() {
-		return -leftEnc.get();
+		return leftEnc.get();
 	}
 
 }
