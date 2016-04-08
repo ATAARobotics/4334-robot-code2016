@@ -43,14 +43,12 @@ public class Auto implements Runnable {
 			try {
 				crossCheval();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (mode == AutoChooser.AutoMode.PORTICUL){
 			try {
 				System.out.println("running test");
-				//crossPort(0);
-				test();
+				crossPort(0);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -115,16 +113,12 @@ public class Auto implements Runnable {
 	public void crossPort(int pos) throws InterruptedException{
 		arm.lowerArmTillSwitch();
 		drive.driveFeet(-13,0.7);
-		
+		drive.turnDegreesRel(180);
+		drive.driveFeet(-11,0.7);
 	}
 	
 	public void test() throws InterruptedException{
-		drive.turnDegreesAbsolute(180);
-		drive.turnDegreesAbsolute(0);
-		drive.turnDegreesAbsolute(180);
-		drive.turnDegreesAbsolute(360);
-		drive.turnDegreesAbsolute(45);
-		drive.turnDegreesAbsolute(10);
+
 //		drive.driveFeet(-5,0.99);
 //		drive.driveFeet(5,0.99);
 //		drive.driveFeet(-5,0.99);
@@ -162,7 +156,7 @@ public class Auto implements Runnable {
 			double turnAng = Math.tan(dX / dY);
 	
 			drive.turnDegreesAbsolute(initAngle + turnAng);
-			arm.lowerArmASynch();
+			arm.lowerArmSynch();
 			drive.driveFeet(driveDis);
 			drive.turnDegreesAbsolute(initAngle);
 			intake.intakeTillShoot();
@@ -258,20 +252,26 @@ public class Auto implements Runnable {
 		try {
 			double initAngle = NavX.getAngle();
             fly.setFlySpeedAuto();
-			arm.lowerArmASynch();
-
+			arm.lowerArmSynch();
+			//most important 
 			System.out.println("hit auto");
 			//prev 9 
-			drive.driveFeet(19.6, 0.75);
-			arm.raiseArmASynch();
-			drive.turnDegreesAbsolute(initAngle + 58.5);
-			arm.lowerArmASynch();
-			drive.driveFeet(8.4, 0.7);
+			drive.driveFeet(20.1, 0.8);
+			arm.raiseArmSynch();
+			Thread.sleep(100);
+			drive.turnDegreesAbsolute(initAngle + 58.6);
+			arm.raiseArmTIllSwitch();
+			arm.lowerArmSynch();
+			drive.driveFeet(7.15, 0.70);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			fly.setFlySpeed(0, 0);
-			drive.driveFeet(-5, 99);
+			arm.raiseArmSynch();
+			drive.driveFeet(-7.2, 0.9);
+			arm.raiseArmTIllSwitch();
 			drive.turnDegreesAbsolute(initAngle + 180);
+			arm.lowerArmSynch();
+			drive.driveFeet(15.5, 0.9);
 		} catch (Exception e) {
 			System.out.println("exiting auto ");
 			e.printStackTrace();

@@ -45,7 +45,7 @@ public class Arm {
 		setArmPow(0);
 	}
 	
-	public void lowerArmASynch(){
+	public void lowerArmSynch(){
 		Thread thread = new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -59,7 +59,7 @@ public class Arm {
 		thread.start();
 	}
 	
-	public void raiseArmASynch(){
+	public void raiseArmSynch(){
 		Thread thread = new Thread(new Runnable(){
 
 			@Override
@@ -73,6 +73,7 @@ public class Arm {
 		});
 		thread.start();
 	}
+	
 	
 
 	

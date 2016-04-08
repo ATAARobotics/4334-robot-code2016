@@ -40,10 +40,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void robotInit() {
-		CameraServer server = CameraServer.getInstance();
-		server.setQuality(50);
-		server.startAutomaticCapture("cam0");
-		
 		autoChooser.putChoosersOnDash();
 		NavX.reset();
 		long initTime = System.currentTimeMillis();

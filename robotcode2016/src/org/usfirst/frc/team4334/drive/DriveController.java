@@ -280,6 +280,11 @@ public class DriveController {
 			if (!(Math.abs(driveErr) < errorThresh)) {
 				initTime = System.currentTimeMillis();
 			} else {
+				if(driveAtRest()){
+					atSetpoint = true;
+					drive.setDrive(0, 0);
+					return;
+				}
 				if (System.currentTimeMillis() - initTime > satTime) {
 					return;
 				}

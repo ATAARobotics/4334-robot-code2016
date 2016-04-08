@@ -49,7 +49,18 @@ public class Intake {
 		setIntake(0);
 	}
 
-
+	public void autoIntake(){
+		if(!ballReady()){
+			setIntake(1);
+		} else{
+			elToro.set(0);
+			intk.set(-1);
+		}
+	}
+	
+	public void setElTorro(double val){
+		elToro.set(-val);
+	}
 
 	public void stop() {
 		elToro.set(0);

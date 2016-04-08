@@ -10,7 +10,7 @@ public class IntakeArmConst {
 	
 	public static double INTK_ULT_THRESH = 15;
 	public static double POT_TO_DEG = 1;
-	public static int EL_TORRO_INK_TIME_MS = 0;
+	public static int EL_TORRO_INK_TIME_MS = 200;
 	
 	public static double ARM_UP = 4.375;
 	public static double ARM_DOWN = 3.35;

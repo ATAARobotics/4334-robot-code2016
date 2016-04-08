@@ -27,8 +27,8 @@ public class AutoChooser {
 		chooser.addDefault("LOW_BAR_ONE_BALL", AutoMode.LOW_BAR_1_BALL);
 		chooser.addObject("DRIVE_FORWARD", AutoMode.FORWARD_CROSS);
 		chooser.addObject("DRIVE_FORWARD_1_BALL", AutoMode.CROSS_1_BALL);
-		chooser.addObject("CHEVAL (NOT IMPLEM)", AutoMode.CHEVAL);
-		chooser.addObject("PORTI (NOT IMPLEM)", AutoMode.PORTICUL);
+		chooser.addObject("CHEVAL", AutoMode.CHEVAL);
+		chooser.addObject("PORTI", AutoMode.PORTICUL);
 		chooser.addObject("DO NOTHING ", AutoMode.DO_NOTHING);
 	
 		positionChooser.addDefault("Position 1", Position.FIRST);

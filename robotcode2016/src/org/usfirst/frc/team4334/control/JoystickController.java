@@ -27,13 +27,13 @@ public class JoystickController implements Loopable {
 	private boolean driverPre = false;
 	
 	
-	//Relay light = new Relay(Ports.LIGHT_RELAY);
+	Relay light = new Relay(Ports.LIGHT_RELAY);
 	boolean lightEnabled = true;
 
 	public JoystickController(Intake i, FlywheelController fly, DriveBase d,
 			ArmController armContrl) {
 		System.out.println("joystick constructor called");
-		//light.set(Relay.Value.kForward);
+		light.set(Relay.Value.kForward);
 		intake = i;
 		flyControl = fly;
 		drive = d;
@@ -100,20 +100,21 @@ public class JoystickController implements Loopable {
 		
 		if(operator.getRawButton(XboxMap.Y.mappedVal())
 				&& lastLightSwitch + 500 < System.currentTimeMillis()){
-//			lastLightSwitch = System.currentTimeMillis();
-//			if(lightEnabled){
-//				light.set(Relay.Value.kOff);
-//				lightEnabled = false;
-//			} else{
-//				light.set(Relay.Value.kForward);
-//				lightEnabled = true;
-//			}
+			lastLightSwitch = System.currentTimeMillis();
+			if(lightEnabled){
+				light.set(Relay.Value.kOff);
+				lightEnabled = false;
+			} else{
+				light.set(Relay.Value.kForward);
+				lightEnabled = true;
+			}
 		}
 		
 		boolean toggled = false;
 		if (operator.getRawButton(XboxMap.LB.mappedVal())) {
-			armControl.setUp();
-			toggled = true;
+//			armControl.setUp();
+//			toggled = true;
+			intake.autoIntake();
 		} else if (operator.getRawButton(XboxMap.RB.mappedVal())) {
 			armControl.setDown();
 			toggled = true;
@@ -149,7 +150,10 @@ public class JoystickController implements Loopable {
 			}
 		} 
 		else if(driver.getRawAxis(XboxMap.TR.mappedVal()) > 0.6){
-			intake.setIntake(1);
+			intake.setElTorro(1);
+		}
+		else if(operator.getRawButton(XboxMap.LB.mappedVal())){
+			intake.autoIntake();
 		}
 		else {
 			double y1 = Utils.deadzone(
