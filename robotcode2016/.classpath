@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="/home/chrx/wpilib/java/current/lib/Pathfinder-Java.jar"/>
 	<classpathentry exported="true" kind="var" path="navx-mxp"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="var" path="wpilib" sourcepath="wpilib.sources"/>

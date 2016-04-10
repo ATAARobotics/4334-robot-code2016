@@ -29,6 +29,14 @@ public class Auto implements Runnable {
 	// looking at the smart dashboard settings
 	@Override
 	public void run() {
+		
+		MotionProfiledAuto.drive = DriveController.drive;
+		MotionProfiledAuto.test();
+		try{
+		Thread.sleep(5000000);
+		} catch(Exception e){
+			
+		}
 		// grab modes from dashboard
 		AutoChooser.Position pos = Robot.autoChooser.getAutoPosition();
 		AutoChooser.AutoMode mode = Robot.autoChooser.getAutoChoice();

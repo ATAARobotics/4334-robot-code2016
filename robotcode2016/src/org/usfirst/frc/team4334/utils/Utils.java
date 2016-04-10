@@ -30,6 +30,12 @@ public class Utils {
 		return Utils.signedMod(a + Math.PI, 2 * Math.PI) - Math.PI;
 	}
 	
+	public static double feetToMetres(double feet){
+		return feet * 0.3048;
+	}
 	
+	public static double metresToFeet(double metres){
+		return metres * 3.28084;
+	}
 	
 }

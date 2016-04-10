@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveController {
-	DriveBase drive;
+	public static DriveBase drive;
 
 	PidController master = new PidController(DriveConstants.DRIVE_KP,
 			DriveConstants.DRIVE_KI, DriveConstants.DRIVE_KD,
