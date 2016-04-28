@@ -136,7 +136,7 @@ public class DriveController {
 		slave.reset();
 		navXStraight.reset();
 
-		double slewRate = 0.0005;
+	
 		
 		long killTime = System.currentTimeMillis() + expiryMS;
 		double initHeading = NavX.getAngle();
@@ -178,10 +178,6 @@ public class DriveController {
 						/ Math.abs(slaveOut);
 			} 
 
-			if(Math.abs(driveOut - lastVal)> slewRate){
-				driveOut += slewRate * (driveOut - lastVal) / 
-						Math.abs(driveOut - lastVal);
-			}
 			drive.setDrive(driveOut - slaveOut + angOut, driveOut + slaveOut - angOut);
 			lastVal = driveOut;
 	

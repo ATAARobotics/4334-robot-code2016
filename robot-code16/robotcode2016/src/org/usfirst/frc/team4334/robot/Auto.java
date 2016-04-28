@@ -3,6 +3,7 @@ package org.usfirst.frc.team4334.robot;
 import org.usfirst.frc.team4334.drive.DriveController;
 import org.usfirst.frc.team4334.flywheel.FlyConstants;
 import org.usfirst.frc.team4334.flywheel.FlywheelController;
+import org.usfirst.frc.team4334.robot.AutoChooser.TypesForGenericCross;
 import org.usfirst.frc.team4334.sensors.NavX;
 import org.usfirst.frc.team4334.subsystems.Arm;
 import org.usfirst.frc.team4334.subsystems.ArmController;
@@ -30,16 +31,17 @@ public class Auto implements Runnable {
 	@Override
 	public void run() {
 		
-		MotionProfiledAuto.drive = DriveController.drive;
-		MotionProfiledAuto.test();
-		try{
-		Thread.sleep(5000000);
-		} catch(Exception e){
+		//MotionProfiledAuto.drive = DriveController.drive;
+		//MotionProfiledAuto.test();
+		//try{
+		//Thread.sleep(5000000);
+		//} catch(Exception e){
 			
-		}
+		//}
 		// grab modes from dashboard
 		AutoChooser.Position pos = Robot.autoChooser.getAutoPosition();
 		AutoChooser.AutoMode mode = Robot.autoChooser.getAutoChoice();
+		AutoChooser.TypesForGenericCross obs = Robot.autoChooser.getObstacle();
 		NavX.resetDisplacement();
 		
 		if (mode == AutoChooser.AutoMode.DO_NOTHING) {
@@ -63,14 +65,14 @@ public class Auto implements Runnable {
 			}
 		}
 		else if (mode == AutoChooser.AutoMode.FORWARD_CROSS) {
-			if (pos == AutoChooser.Position.SECOND) {
-				genericCross();
-			} else if (pos == AutoChooser.Position.THIRD) {
-				genericCross();
-			} else if (pos == AutoChooser.Position.FOURTH) {
-				genericCross();
-			} else if (pos == AutoChooser.Position.FITFH) {
-				genericCross();
+			if (obs == AutoChooser.TypesForGenericCross.MOAT) {
+				genericCross(30);//maybe different for comp
+			} else if (obs == AutoChooser.TypesForGenericCross.ROCK) {
+				genericCross(33);
+			} else if (obs == AutoChooser.TypesForGenericCross.RAMPARTS) {
+				genericCross(25);
+			} else if (obs == AutoChooser.TypesForGenericCross.ROUGH) {
+				genericCross(20);
 			}
 		} else if (mode == AutoChooser.AutoMode.CROSS_1_BALL) {
 			if (pos == AutoChooser.Position.SECOND) {
@@ -105,12 +107,13 @@ public class Auto implements Runnable {
 		//drive.driveFeet(-5,0.99);
 	}
 
-	public void genericCross() {
+	public void genericCross(double driveFeet) {
 		try {
 			intake.setIntake(-1);
-			drive.driveFeet(15, 0.99);
+			drive.driveFeet(15, 0.99); //15 feet at comp because encoder stuff, driveFeet is what it was before 
 			intake.setIntakTillStop(1);
-			drive.driveFeet(-13, 0.99);
+			drive.driveFeet(-13, 0.99); //-13 feet at comp 
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,7 +155,7 @@ public class Auto implements Runnable {
 		double initAngle = NavX.getAngle();
 		try {
 			arm.raiseArmTIllSwitch(); 
-			drive.driveFeet(12, 0.99);
+			drive.driveFeet(20, 0.99);
 			fly.setFlySpeedBatter();
 			initY += NavX.getDisplacementZ() * 3.28083;
 			initX += NavX.getDisplacementX() * 3.28083;

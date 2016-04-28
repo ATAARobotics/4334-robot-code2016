@@ -15,7 +15,7 @@ public class Arm {
 	
 	
 	public boolean bottomLimPressed(){
-		return limitLow.get(); //change to !limitLow.get(); at worlds 
+		return !limitLow.get(); //change to !limitLow.get(); at worlds 
 	}
 	
 	public boolean topLimPressed(){

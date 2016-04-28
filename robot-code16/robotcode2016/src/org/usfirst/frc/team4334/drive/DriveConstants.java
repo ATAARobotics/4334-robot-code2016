@@ -30,7 +30,7 @@ public class DriveConstants {
 
 	
 	//drive straight
-	public static final double DRIVE_KP = 0.0110;
+	public static final double DRIVE_KP = 0.0210;
 	public static final double DRIVE_KI = 0.00012;
 	public static final double DRIVE_KD = 0.02;
 	public static final double DRIVE_INT_LIM = 0.10 / DRIVE_KI;

@@ -14,15 +14,22 @@ public class AutoChooser {
 	public static enum Position {
 		FIRST, SECOND, THIRD, FOURTH, FITFH;
 	}
+	
+	public static enum TypesForGenericCross{
+		ROCK, MOAT, RAMPARTS, ROUGH;
+	}
 
 	AutoMode mode;
 	Position position;
+	TypesForGenericCross obstacle;
 	private final SendableChooser chooser;
 	private final SendableChooser positionChooser;
+	private final SendableChooser obsChooser;
 
 	public AutoChooser() {
 		positionChooser = new SendableChooser();
 		chooser = new SendableChooser();
+		obsChooser = new SendableChooser();
 		
 		chooser.addDefault("LOW_BAR_ONE_BALL", AutoMode.LOW_BAR_1_BALL);
 		chooser.addObject("DRIVE_FORWARD", AutoMode.FORWARD_CROSS);
@@ -36,11 +43,17 @@ public class AutoChooser {
 		positionChooser.addObject("Position 3", Position.THIRD);
 		positionChooser.addObject("Position 4", Position.FOURTH);
 		positionChooser.addObject("Position 5", Position.FITFH);	
+		
+		obsChooser.addObject("Rock Wall", TypesForGenericCross.ROCK);
+		obsChooser.addObject("Moat", TypesForGenericCross.MOAT);
+		obsChooser.addObject("Ramparts", TypesForGenericCross.RAMPARTS);
+		obsChooser.addObject("Rough T", TypesForGenericCross.ROUGH);
 	}
 	
 	public void putChoosersOnDash(){
 		SmartDashboard.putData("Auto_Mode_Chooser ", chooser);
 		SmartDashboard.putData("Auto_Positon_Chooser ", positionChooser );
+		SmartDashboard.putData("Obstacle Chooser", obsChooser);
 	}
 
 	public AutoMode getAutoChoice() {
@@ -49,6 +62,10 @@ public class AutoChooser {
 	
 	public Position getAutoPosition(){
 		return (Position) positionChooser.getSelected();
+	}
+	
+	public TypesForGenericCross getObstacle(){
+		return (TypesForGenericCross) obsChooser.getSelected();
 	}
 
 }
