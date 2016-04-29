@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-	public static final boolean isCompBot = false;
+	public static final boolean isCompBot = true;
 
 	DriveBase driveBase = new DriveBase();
 	DriveController driveControl = new DriveController(driveBase);

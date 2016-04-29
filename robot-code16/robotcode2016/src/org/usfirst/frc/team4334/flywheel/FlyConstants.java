@@ -21,6 +21,7 @@ public class FlyConstants {
 	 static double RPM_OBST = 8500;
 	 static double POW_OBST = 0.7;
 	 
+	 public static double AUTO_GENERIC_RPM = 5000;
 	 public static double AUTO_RPM = 8500;
 	 public static double AUTO_POW = 0.7;
  

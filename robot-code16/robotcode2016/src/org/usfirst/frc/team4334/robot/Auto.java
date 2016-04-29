@@ -66,13 +66,13 @@ public class Auto implements Runnable {
 		}
 		else if (mode == AutoChooser.AutoMode.FORWARD_CROSS) {
 			if (obs == AutoChooser.TypesForGenericCross.MOAT) {
-				genericCross(30);//maybe different for comp
+				genericCross(16);
 			} else if (obs == AutoChooser.TypesForGenericCross.ROCK) {
-				genericCross(33);
+				genericCross(16);
 			} else if (obs == AutoChooser.TypesForGenericCross.RAMPARTS) {
-				genericCross(25);
+				genericCross(16);
 			} else if (obs == AutoChooser.TypesForGenericCross.ROUGH) {
-				genericCross(20);
+				genericCross(16);
 			}
 		} else if (mode == AutoChooser.AutoMode.CROSS_1_BALL) {
 			if (pos == AutoChooser.Position.SECOND) {
@@ -109,11 +109,18 @@ public class Auto implements Runnable {
 
 	public void genericCross(double driveFeet) {
 		try {
-			intake.setIntake(-1);
-			drive.driveFeet(15, 0.99); //15 feet at comp because encoder stuff, driveFeet is what it was before 
-			intake.setIntakTillStop(1);
-			drive.driveFeet(-13, 0.99); //-13 feet at comp 
-			
+			double initAngle = NavX.getAngle();
+			fly.setFlySpeedGenericCross();
+			drive.driveFeet(driveFeet, 0.99);
+			drive.turnDegreesAbsolute(initAngle);
+			arm.lowerArmTillSwitch();
+			intake.setIntake(1);
+			Thread.sleep(1000);
+			intake.setIntake(0);
+			fly.setFlySpeed(0, 0);
+			arm.raiseArmSynch();
+			drive.driveFeet(-driveFeet+3, 0.99);
+			drive.turnDegreesAbsolute(initAngle);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -155,23 +162,28 @@ public class Auto implements Runnable {
 		double initAngle = NavX.getAngle();
 		try {
 			arm.raiseArmTIllSwitch(); 
-			drive.driveFeet(20, 0.99);
-			fly.setFlySpeedBatter();
+			fly.setFlySpeedAuto();
+			drive.driveFeet(16, 0.90);
 			initY += NavX.getDisplacementZ() * 3.28083;
 			initX += NavX.getDisplacementX() * 3.28083;
 
 			// calculate distance between
 			double dX = shootX - initX;
 			double dY = shootY - initY;
-			double driveDis = Math.sqrt(initY * initY + initX * initX);
-			double turnAng = Math.tan(dX / dY);
-	
-			drive.turnDegreesAbsolute(initAngle + turnAng);
+			double driveDis = Math.sqrt((dY * dY) + (dX * dX));
+			System.out.println("Distance:" + driveDis);
+			double turnAngRadians = Math.atan2(dX, dY);     //  original Math.tan(dX / dY);   
+			double turnAngDegrees = Math.toDegrees(turnAngRadians);
+			System.out.println("Degrees:" + turnAngDegrees);
+			drive.turnDegreesAbsolute(initAngle + turnAngDegrees);
 			arm.lowerArmSynch();
 			drive.driveFeet(driveDis);
 			drive.turnDegreesAbsolute(initAngle);
-			intake.intakeTillShoot();
-			drive.driveFeet(2);
+			Thread.sleep(420);// \//\
+			intake.setIntake(1);//intake.intakeTillShoot();
+			Thread.sleep(1000);
+			fly.setFlySpeed(0, 0);
+			//drive.driveFeet(2);
 		
 			//go back through defense we came initially 
 			//drive.turnDegreesAbsolute(initAngle + turnAng);
@@ -265,15 +277,25 @@ public class Auto implements Runnable {
             fly.setFlySpeedAuto();
 			arm.lowerArmSynch();
 			//most important 
-			System.out.println("hit auto");
+			System.out.println("hit auto pls");
 			//prev 9 
-			drive.driveFeet(20.1, 0.8);
+			drive.driveFeet(19.72, 0.8);
+			//new
+			//drive.driveFeet(18.1, 0.8);
 			arm.raiseArmSynch();
-			Thread.sleep(100);
+			Thread.sleep(420);//    \//\ used to be 100???
 			drive.turnDegreesAbsolute(initAngle + 58.6);
+			//new
+			//drive.turnDegreesAbsolute(initAngle + 10.0);
 			arm.raiseArmTIllSwitch();
+			//new
+			//drive.driveFeet(2.2756, 0.70);
+			//drive.turnDegreesAbsolute(initAngle + 58.6);
 			arm.lowerArmSynch();
-			drive.driveFeet(7.15, 0.70);
+			drive.driveFeet(7.8, 0.70);
+			Thread.sleep(500);
+			//new
+			//drive.driveFeet(6.6870, 0.70);
 			intake.setIntake(1);
 			Thread.sleep(1000);
 			fly.setFlySpeed(0, 0);
@@ -284,7 +306,7 @@ public class Auto implements Runnable {
 			arm.lowerArmSynch();
 			drive.driveFeet(15.5, 0.9);
 		} catch (Exception e) {
-			System.out.println("exiting auto ");
+			System.out.println("exiting auto error");
 			e.printStackTrace();
 			return;
 		}

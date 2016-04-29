@@ -41,8 +41,8 @@ public class DriveConstants {
 	public static final double DRIVE_SLAVE_INT_LIM = 200;
 	
 	//gyro turn 
-	public static final double TURN_KP = 0.05;
-	public static final double TURN_KI = 0.002;//0.0006;
+	public static final double TURN_KP = 0.06;//0.05;
+	public static final double TURN_KI = 0.004;//0.002;
 	public static final double TURN_KD = 0.4;//0.02;
 	public static final double TURN_INT_LIM = 0.25 / TURN_KI;
 	

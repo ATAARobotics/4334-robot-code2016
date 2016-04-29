@@ -61,7 +61,7 @@ public class DriveBase {
 	}
 
 	public int getLeftEnc() {
-		return leftEnc.get();
+		return -leftEnc.get();
 	}
 
 }

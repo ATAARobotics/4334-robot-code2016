@@ -18,6 +18,7 @@ public class Ports {
 	public static final int INTAKE = 3; //compbot = 3 regular = 7
 	public static final int EL_TORRO = 6; //compbot = 6 regular = 4
 	
+	
 	public static final int EL_TORRO_ULT = 2; //compbot = 2 regular = 4
 	public static final int EL_TORRO_ULT_2 = 3; //compbot = 3 regular = 5
 	public static final int ARM_POT = 0; 
