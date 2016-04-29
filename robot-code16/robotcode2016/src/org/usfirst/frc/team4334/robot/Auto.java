@@ -163,10 +163,12 @@ public class Auto implements Runnable {
 		try {
 			arm.raiseArmTIllSwitch(); 
 			fly.setFlySpeedAuto();
-			drive.driveFeet(16, 0.90);
+			drive.driveFeet(11, 0.90);
+			System.out.println("Running cross 1 ball auto");
 			initY += NavX.getDisplacementZ() * 3.28083;
 			initX += NavX.getDisplacementX() * 3.28083;
-
+			System.out.println("init x after cross = " + initX);
+			System.out.println("init y after cross = " + initY);
 			// calculate distance between
 			double dX = shootX - initX;
 			double dY = shootY - initY;
@@ -177,13 +179,16 @@ public class Auto implements Runnable {
 			System.out.println("Degrees:" + turnAngDegrees);
 			drive.turnDegreesAbsolute(initAngle + turnAngDegrees);
 			arm.lowerArmSynch();
-			drive.driveFeet(driveDis);
+			System.out.println("driving to batter ");
+			drive.driveFeet(driveDis, 0.8);
+			System.out.println("turning back ");
 			drive.turnDegreesAbsolute(initAngle);
-			Thread.sleep(420);// \//\
-			intake.setIntake(1);//intake.intakeTillShoot();
+			System.out.println("driving to batter ");
+			intake.setIntake(1);
 			Thread.sleep(1000);
+			intake.setIntake(0);
 			fly.setFlySpeed(0, 0);
-			//drive.driveFeet(2);
+			drive.driveFeet(-5,0.8);
 		
 			//go back through defense we came initially 
 			//drive.turnDegreesAbsolute(initAngle + turnAng);
